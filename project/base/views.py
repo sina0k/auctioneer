@@ -6,4 +6,6 @@ from .models import Company, Product, Auction, Transaction, Deal
 
 
 def home (request):
-    return render(request,'base/home.html')
+    auctions = Auction.objects.all()
+    context = {'auctions': auctions}
+    return render(request,'base/home.html',context)

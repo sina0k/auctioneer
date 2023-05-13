@@ -7,6 +7,7 @@ class User(AbstractUser):
     address = models.TextField(null=True)
     email = models.EmailField(unique=True, null=True)
     phone = models.CharField(max_length=14, null=True)
+    bids = models.IntegerField()
 
     # Add the related_name arguments to resolve the clashes
     groups = models.ManyToManyField(
@@ -15,6 +16,7 @@ class User(AbstractUser):
     user_permissions = models.ManyToManyField(
         'auth.Permission', related_name='custom_user_set', blank=True
     )
+
 
 # phone = PhoneNumberField()
 
@@ -31,7 +33,6 @@ class Product(models.Model):
     description = models.TextField()
 
 
-
 class Auction(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
@@ -42,9 +43,9 @@ class Auction(models.Model):
     class Meta:
         ordering = ['-start_time']
 
+
 class Transaction(models.Model):
     payment_number = models.CharField(max_length=25)
-
 
 
 class Deal(models.Model):

@@ -9,24 +9,25 @@
         <!-- Main content goes here -->
         <section id="featured-auctions">
             <h2>Featured Auctions</h2>
-            <!-- Display a grid of featured auctions -->
             <div class="auction-grid">
-                <!-- Example auction item -->
+        <!-- Start of the for loop -->
+                {% for auction in auctions %}
                 <div class="auction-item">
                     <div class="item-image">
-                        <img src="path/to/image.jpg" alt="Auction Item Image">
+<!--                        <img src="{{ auction.image }}" alt="{{ auction.title }}">-->
                     </div>
                     <div class="item-details">
-                        <h3>Auction Item Name</h3>
-                        <p>Current Price: $100</p>
-                        <p>Time Left: 00:02:30</p>
-                        <!-- Add more details as needed -->
+                        <h3>{{ auction.title }}</h3>
+                        <p>Current Price: {{ auction.current_price }}</p>
+                       <p>Time Left: {{ auction.time_left }}</p>
                         <a href="#">Place Bid</a>
                     </div>
                 </div>
-                <!-- Add more auction items as needed -->
+                {% endfor %}
+        <!-- End of the for loop -->
             </div>
         </section>
+
 
         <!-- Add more sections and content for your homepage as desired -->
     </main>
