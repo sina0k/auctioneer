@@ -42,6 +42,9 @@
 <div class="home-container">
   <div>
     <h3>Browse Items</h3>
+    <form method="GET" action="{% url 'home' %}">
+      <input type="text" name="q" placeholder="Search Auctions..."/>
+    </form>
     <hr>
   </div>
   <div>
