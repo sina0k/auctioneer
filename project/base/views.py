@@ -6,4 +6,4 @@ from .models import Company, Product, Auction, Transaction, Deal
 
 
 def home (request):
-    return render(request,'home.html')
+    return render(request,'base/home.html')
