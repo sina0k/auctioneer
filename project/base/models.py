@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
 
 
 class User(AbstractUser):
@@ -7,7 +8,7 @@ class User(AbstractUser):
     address = models.TextField(null=True)
     email = models.EmailField(unique=True, null=True)
     phone = models.CharField(max_length=14, null=True)
-    bids = models.IntegerField()
+    bids = models.IntegerField(default=0)
 
     # Add the related_name arguments to resolve the clashes
     groups = models.ManyToManyField(
@@ -35,7 +36,7 @@ class Product(models.Model):
 
 class Auction(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
+    start_time = models.DateTimeField(default=timezone.now)
     current_price = models.DecimalField(max_digits=10, decimal_places=0)
     bid_duration = models.IntegerField()
     last_bidder = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
