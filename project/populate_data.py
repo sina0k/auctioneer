@@ -10,7 +10,7 @@ django.setup()
 
 fake = Faker()
 User = get_user_model()
-from base.models import User, Company, Product, Auction, Transaction, Deal
+from base.models import User, Company, Product, Auction, Transaction, Deal, Category, DealType
 
 fake = Faker()
 
@@ -40,11 +40,13 @@ def generate_fake_auctions(num_auctions, *args, **options):
         )
         companies.append(company)
 
+
         product = Product.objects.create(
             company=company,
             name=fake.word(),
             price=fake.random_int(min=10, max=100),
-            description=fake.text()
+            description=fake.text(),
+            category = fake.random_element(elements=[ca.value for ca in Category])
         )
         products.append(product)
 
@@ -68,8 +70,9 @@ def generate_fake_auctions(num_auctions, *args, **options):
             buyer=user,
             date_modified=fake.date_time(),
             address=fake.address(),
-            deal_type=fake.word(),
-            transaction=transaction
+            transaction=transaction,
+            deal_type = fake.random_element(elements=[de.value for de in DealType]),
+
         )
         deals.append(deal)
 

@@ -1,7 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
+from enum import Enum
 
+
+class DealType(Enum):
+    AUCTION = 'Auction'
+    BUY = 'Buy'
+
+
+class Category(Enum):
+    ELEC = 'Electronics and Computers'
+    CAR = 'Cars'
+    BID = 'Bid Packs'
+    HOME = "Home, Garden and Tools"
+    FASHION = 'Fashion, Health and Beauty'
+    CARD = 'Gift Cards'
+    KITCHEN = 'Kitchen and Dining'
+    OTHER = 'Other'
 
 class User(AbstractUser):
     name = models.CharField(max_length=200, null=True)
@@ -21,7 +37,6 @@ class User(AbstractUser):
 
 # phone = PhoneNumberField()
 
-
 class Company(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
@@ -32,6 +47,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=0)
     description = models.TextField()
+    category = models.CharField(max_length=20, choices=[(Category.value, Category.name) for ca in Category])
 
 
 class Auction(models.Model):
@@ -54,5 +70,5 @@ class Deal(models.Model):
     buyer = models.ForeignKey(User, on_delete=models.CASCADE)
     date_modified = models.DateTimeField(auto_now_add=True)
     address = models.TextField(null=False)
-    deal_type = models.CharField(max_length=10)  # Updated field name
+    deal_type = models.CharField(max_length=20, choices=[(DealType.value, DealType.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)
