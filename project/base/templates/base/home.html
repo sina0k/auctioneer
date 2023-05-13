@@ -2,41 +2,78 @@
 
 {% block content %}
 
-<body>
+<!--<body>-->
 
 
-    <main>
-        <!-- Main content goes here -->
-        <section id="featured-auctions">
-            <h2>Featured Auctions</h2>
-            <div class="auction-grid">
-        <!-- Start of the for loop -->
-                {% for auction in auctions %}
-                <div class="auction-item">
-                    <div class="item-image">
-<!--                        <img src="{{ auction.image }}" alt="{{ auction.title }}">-->
-                    </div>
-                    <div class="item-details">
-                        <h3>{{ auction.title }}</h3>
-                        <p>Current Price: {{ auction.current_price }}</p>
-                       <p>Time Left: {{ auction.time_left }}</p>
-                        <a href="#">Place Bid</a>
-                    </div>
-                </div>
-                {% endfor %}
-        <!-- End of the for loop -->
-            </div>
-        </section>
+<!--    <main>-->
+<!--        &lt;!&ndash; Main content goes here &ndash;&gt;-->
+<!--        <section id="featured-auctions">-->
+<!--            <h2>Featured Auctions</h2>-->
+<!--            <div class="auction-grid">-->
+<!--        &lt;!&ndash; Start of the for loop &ndash;&gt;-->
+<!--                {% for auction in auctions %}-->
+<!--                <div class="auction-item">-->
+<!--                    <div class="item-image">-->
+<!--&lt;!&ndash;                        <img src="{{ auction.image }}" alt="{{ auction.title }}">&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="item-details">-->
+<!--                        <h3>{{ auction.title }}</h3>-->
+<!--                        <p>Current Price: {{ auction.current_price }}</p>-->
+<!--                       <p>Time Left: {{ auction.time_left }}</p>-->
+<!--                        <a href="#">Place Bid</a>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                {% endfor %}-->
+<!--        &lt;!&ndash; End of the for loop &ndash;&gt;-->
+<!--            </div>-->
+<!--        </section>-->
 
 
-        <!-- Add more sections and content for your homepage as desired -->
-    </main>
+<!--        &lt;!&ndash; Add more sections and content for your homepage as desired &ndash;&gt;-->
+<!--    </main>-->
 
-    <footer>
-        <!-- Footer content goes here -->
-        <p>&copy; 2023 Your Penny Auction Website. All rights reserved.</p>
-    </footer>
+<!--    <footer>-->
+<!--        &lt;!&ndash; Footer content goes here &ndash;&gt;-->
+<!--        <p>&copy; 2023 Your Penny Auction Website. All rights reserved.</p>-->
+<!--    </footer>-->
+<!--</body>-->
+<!--</html>-->
+
+<div class="home-container">
+  <div>
+    <h3>Browse Items</h3>
+    <hr>
+  </div>
+  <div>
+    <body>
+  <div class="container">
+    <div class="auction-grid">
+      {% for auction in auctions %}
+        {% if forloop.counter0|divisibleby:6 %}
+          <div class="auction-column">
+        {% endif %}
+        <div class="auction-card">
+          <h2>{{ auction.product.name }}</h2>
+          <p>Current Price: <span class="price">${{ auction.current_price }}</span></p>
+          <p>Bid Duration: {{ auction.bid_duration }} minutes</p>
+          <p>Last Bidder: {% if auction.last_bidder %}{{ auction.last_bidder.username }}{% else %}None{% endif %}</p>
+          <!-- Add more details or customizations here -->
+        </div>
+        {% if forloop.counter|divisibleby:6 or forloop.last %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      {% if not auctions %}
+        <p>No auctions available.</p>
+      {% endif %}
+    </div>
+  </div>
 </body>
-</html>
+  </div>
 
+
+
+</div>
 {% endblock content %}
+
+
