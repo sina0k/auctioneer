@@ -2,5 +2,40 @@
 
 {% block content %}
 
-<h1>Home template</h1>
+<body>
+
+
+    <main>
+        <!-- Main content goes here -->
+        <section id="featured-auctions">
+            <h2>Featured Auctions</h2>
+            <!-- Display a grid of featured auctions -->
+            <div class="auction-grid">
+                <!-- Example auction item -->
+                <div class="auction-item">
+                    <div class="item-image">
+                        <img src="path/to/image.jpg" alt="Auction Item Image">
+                    </div>
+                    <div class="item-details">
+                        <h3>Auction Item Name</h3>
+                        <p>Current Price: $100</p>
+                        <p>Time Left: 00:02:30</p>
+                        <!-- Add more details as needed -->
+                        <a href="#">Place Bid</a>
+                    </div>
+                </div>
+                <!-- Add more auction items as needed -->
+            </div>
+        </section>
+
+        <!-- Add more sections and content for your homepage as desired -->
+    </main>
+
+    <footer>
+        <!-- Footer content goes here -->
+        <p>&copy; 2023 Your Penny Auction Website. All rights reserved.</p>
+    </footer>
+</body>
+</html>
+
 {% endblock content %}
