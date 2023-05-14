@@ -52,17 +52,17 @@
   <div class="container">
     <div class="auction-grid">
       {% for auction in auctions %}
-        {% if forloop.counter0|divisibleby:6 %}
+        {% if forloop.counter0|divisibleby:4 %}
           <div class="auction-column">
         {% endif %}
         <div class="auction-card">
           <a href="{% url 'auction' auction.id %}"><h2>{{ auction.product.name }} </h2> </a>
-          <p>Current Price: <span class="price">${{ auction.current_price }}</span></p>
-          <p>Bid Duration: {{ auction.bid_duration }} minutes</p>
+          <p>Buying Price: <span class="price">{{ auction.current_price }}</span></p>
+          <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
           <p>Last Bidder: {% if auction.last_bidder %}{{ auction.last_bidder.username }}{% else %}None{% endif %}</p>
           <!-- Add more details or customizations here -->
         </div>
-        {% if forloop.counter|divisibleby:6 or forloop.last %}
+        {% if forloop.counter|divisibleby:4 or forloop.last %}
           </div>
         {% endif %}
         <hr>
