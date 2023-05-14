@@ -12,6 +12,8 @@
             <p>Last Bidder: {% if auction.last_bidder %}{{ auction.last_bidder.username }}{% else %}None{% endif %}</p>
             <p>Product Description: {{auction.product.description}}</p>
             <p>Company Description: {{auction.product.company.description}}</p>
+            <p>Product Category: {{auction.product.category}}</p>
+
             <!-- Add more details or customizations here -->
         </div>
     </div>
