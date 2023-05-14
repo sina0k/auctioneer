@@ -56,7 +56,7 @@
           <div class="auction-column">
         {% endif %}
         <div class="auction-card">
-          <h2>{{ auction.product.name }}</h2>
+<!--          <a href="{% url 'auction' auction.id %}"><h2>{{ auction.product.name }} </h2> </a>-->
           <p>Current Price: <span class="price">${{ auction.current_price }}</span></p>
           <p>Bid Duration: {{ auction.bid_duration }} minutes</p>
           <p>Last Bidder: {% if auction.last_bidder %}{{ auction.last_bidder.username }}{% else %}None{% endif %}</p>
@@ -65,6 +65,8 @@
         {% if forloop.counter|divisibleby:6 or forloop.last %}
           </div>
         {% endif %}
+        <hr>
+
       {% endfor %}
       {% if not auctions %}
         <p>No auctions available.</p>

@@ -5,7 +5,6 @@ from faker import Faker
 from django.contrib.auth import get_user_model
 import os
 import django
-from django_seed import Seed
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
