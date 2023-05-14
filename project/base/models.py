@@ -24,7 +24,7 @@ class Bid(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
     time = models.TimeField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    auction = models.ForeignKey('Auction', on_delete=models.CASCADE, related_name='bids')
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='bids')
 
 
@@ -54,7 +54,7 @@ class Product(models.Model):
     name = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=0)
     description = models.TextField(null=True, blank=True)
-    category = models.CharField(max_length=20, choices=[(Category.value, Category.name) for ca in Category])
+    category = models.CharField(max_length=50, choices=[(ca.value, ca.name) for ca in Category])
 
 
 class Auction(models.Model):
@@ -70,12 +70,13 @@ class Auction(models.Model):
 
 class Transaction(models.Model):
     payment_number = models.CharField(max_length=25)
+    price = models.DecimalField(max_digits=10, decimal_places=0, null=False, default=0)
 
 
 class Deal(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
     date_modified = models.DateTimeField(auto_now_add=True)
     address = models.TextField(null=False)
-    deal_type = models.CharField(max_length=20, choices=[(DealType.value, DealType.name) for dt in DealType])
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
+    deal_type = models.CharField(max_length=50, choices=[(dt.value, dt.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)

@@ -1,16 +1,18 @@
 import random
 from django.utils import timezone
+from datetime import datetime, timedelta
 from faker import Faker
 from django.contrib.auth import get_user_model
 import os
 import django
+from django_seed import Seed
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 django.setup()
 
 fake = Faker()
 User = get_user_model()
-from base.models import User, Company, Product, Auction, Transaction, Deal, Category, DealType
+from base.models import User, Company, Product, Auction, Transaction, Deal, Category, DealType, Bid
 
 fake = Faker()
 
@@ -21,6 +23,7 @@ def generate_fake_auctions(num_auctions, *args, **options):
     products = []
     auctions = []
     transactions = []
+    bids = []
     deals = []
     for _ in range(num_auctions):
         user = User.objects.create(
@@ -30,7 +33,7 @@ def generate_fake_auctions(num_auctions, *args, **options):
             address=fake.address(),
             email=fake.unique.email(),
             phone=fake.phone_number(),
-            bids=fake.random_int(min=4, max=100)
+            bids_number=fake.random_int(min=4, max=100)
         )
         users.append(user)
 
@@ -40,19 +43,17 @@ def generate_fake_auctions(num_auctions, *args, **options):
         )
         companies.append(company)
 
-
         product = Product.objects.create(
             company=company,
             name=fake.word(),
             price=fake.random_int(min=10, max=100),
             description=fake.text(),
-            category = fake.random_element(elements=[ca.value for ca in Category])
+            category=fake.random_element(elements=[ca.value for ca in Category])
         )
         products.append(product)
 
         auction = Auction.objects.create(
             product=product,
-
             start_time=timezone.make_aware(fake.date_time(), timezone.get_current_timezone()),
             current_price=fake.random_int(min=1, max=1000),
             bid_duration=fake.random_int(min=10, max=60),
@@ -61,29 +62,74 @@ def generate_fake_auctions(num_auctions, *args, **options):
         auctions.append(auction)
 
         transaction = Transaction.objects.create(
-            payment_number=fake.random_number(digits=10)
+            payment_number=fake.random_number(digits=10),
+            price=fake.random_int(min=1, max=1000)
         )
         transactions.append(transaction)
 
-        deal = Deal.objects.create(
-            product=product,
-            buyer=user,
-            date_modified=fake.date_time(),
-            address=fake.address(),
-            transaction=transaction,
-            deal_type = fake.random_element(elements=[de.value for de in DealType]),
+        for i in range(6):
+            deal = Deal.objects.create(
+                product=product,
+                user=user,
+                address=fake.address(),
+                transaction=transaction,
+                deal_type=fake.random_element(elements=[de.value for de in DealType]),
 
-        )
-        deals.append(deal)
+            )
+            deals.append(deal)
 
-    User.objects.bulk_create(users)
+        num_bids = fake.random_int(min=1, max=20)
+
+        for _ in range(num_bids):
+            bid = Bid.objects.create(
+                price=fake.random_int(min=1, max=1000),
+                time=fake.time_object(),
+                auction=auction,
+                user=user,
+            )
+            bids.append(bid)
+
+    for user in users:
+        user.save()
+
+    for d in deals:
+        d.save()
+
+    for a in auctions:
+        a.save()
+
+    users = User.objects.all()
+    auctions = Auction.objects.all()
+
+    for i, user in enumerate(users):
+        user.bids.set(Bid.objects.filter(user=user))
+        user.deals.set(Deal.objects.filter(user=user))
+
+    for i, auction in enumerate(auctions):
+        auction.bids.set(Bid.objects.filter(auction=auction))
+
     Company.objects.bulk_create(companies)
     Product.objects.bulk_create(products)
-    Auction.objects.bulk_create(auctions)
     Transaction.objects.bulk_create(transactions)
-    Deal.objects.bulk_create(deals)
+    Bid.objects.bulk_create(bids)
+
+
+def delete_db():
+    Bid.objects.all().delete()
+    Product.objects.all().delete()
+    Auction.objects.all().delete()
+    Transaction.objects.all().delete()
+    Deal.objects.all().delete()
+    User.objects.all().delete()
+    Company.objects.all().delete()
 
 
 if __name__ == '__main__':
-    num_auctions = 50
+    # delete_db()
+
+    num_auctions = 60
     generate_fake_auctions(num_auctions)
+    # users = User.objects.all()
+    # u = random.choice(users) if users else None
+    #
+    # print(u.bids)
