@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Company, Product, Auction, Transaction, Deal, User
+from .models import Company, Product, Auction, Transaction, Deal, User, Bid
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm
@@ -10,19 +10,20 @@ from .forms import UserForm, MyUserCreationForm
 
 def loginPage(request):
     page = 'login'
-    # if request.user.is_authenticated:
-    #     return redirect('home')
-    #
+    if request.user.is_authenticated:
+        return redirect('home')
+
     if request.method == 'POST':
-        email = request.POST.get('email').lower()
+        username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
+
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(username=username)
         except:
             messages.error(request, 'User does not exist')
 
-        user = authenticate(request, email=email, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
