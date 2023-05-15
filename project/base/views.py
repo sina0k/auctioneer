@@ -32,7 +32,6 @@ def loginPage(request):
         # else:
         #     messages.error(request, 'Username OR password does not exit')
 
-
         try:
             user = User.objects.get(username=username)
         except:
@@ -46,7 +45,7 @@ def loginPage(request):
         else:
             messages.error(request, 'Username OR password does not exit')
 
-        return redirect('home ')
+        return redirect('home')
 
     return render(request, 'base/login_register.html', context)
 
@@ -82,8 +81,9 @@ def home(request):
         Q(product__description__icontains=q)
     )
 
+    won_deals = Deal.objects.filter(deal_type='Auction')[:10]
     auction_count = auctions.count()
-    context = {'auctions': auctions, 'auction_count': auction_count}
+    context = {'auctions': auctions, 'auction_count': auction_count, 'won_deals': won_deals}
     return render(request, 'base/home.html', context)
 
 

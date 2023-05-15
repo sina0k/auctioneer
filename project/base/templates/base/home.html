@@ -39,15 +39,24 @@
 <!--</body>-->
 <!--</html>-->
 
+<style>
+    .home-container {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+    }
+</style>
+
+
 <div class="home-container">
+
   <div>
-    <h3>Browse Items</h3>
-    <form method="GET" action="{% url 'home' %}">
-      <input type="text" name="q" placeholder="Search Auctions..."/>
-    </form>
-    <hr>
-  </div>
-  <div>
+      <div>
+        <h3>Browse Items</h3>
+        <form method="GET" action="{% url 'home' %}">
+        <input type="text" name="q" placeholder="Search Auctions..."/>
+        </form>
+        <hr>
+      </div>
     <h2>There are {{auction_count}} auctions available</h2>
     <hr>
     <body>
@@ -76,6 +85,18 @@
     </div>
   </div>
 </body>
+  </div>
+  <div>
+     <h2>Recent Wins</h2>
+      {% for deal in won_deals%}
+      <div>
+        <small>@{{deal.user}} {{deal.date_modified|timesince}}</small>
+        <p>has won: {{deal.product.name}}</p>
+        <p>at price: {{deal.transaction.price}}</p>
+        <hr>
+      </div>
+
+      {% endfor%}
   </div>
 
 

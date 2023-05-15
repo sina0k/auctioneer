@@ -80,3 +80,7 @@ class Deal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
     deal_type = models.CharField(max_length=50, choices=[(dt.value, dt.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['-date_modified']
+
