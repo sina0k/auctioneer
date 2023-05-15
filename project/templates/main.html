@@ -12,11 +12,17 @@
 
     <link rel="stylesheet" href="{% static 'styles/style.css' %}"/>
 
-    <script src="main.js"></script>
 </head>
 <body>
 {% include 'navbar.html' %}
 
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 {% block content %}
 
 {% endblock %}
