@@ -10,12 +10,27 @@ from .forms import UserForm, MyUserCreationForm
 
 def loginPage(request):
     page = 'login'
+    context = {'page': page}
+
     if request.user.is_authenticated:
         return redirect('home')
 
     if request.method == 'POST':
         username = request.POST.get('username').lower()
         password = request.POST.get('password')
+
+        # try:
+        #     user = User.objects.get(username=username)
+        # except:
+        #     messages.error(request, 'User does not exist')
+        #
+        # if user.check_password(password):
+        #     context.update({'user': user})
+        #     login(request, user)
+        #     return redirect(request, 'base/home.html', context)
+        #
+        # else:
+        #     messages.error(request, 'Username OR password does not exit')
 
 
         try:
@@ -31,7 +46,7 @@ def loginPage(request):
         else:
             messages.error(request, 'Username OR password does not exit')
 
-    context = {'page': page}
+        return redirect('home ')
 
     return render(request, 'base/login_register.html', context)
 
