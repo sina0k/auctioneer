@@ -22,10 +22,12 @@ class Category(Enum):
 
 class Bid(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
-    time = models.TimeField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     auction = models.ForeignKey('Auction', on_delete=models.CASCADE, related_name='bids')
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='bids')
+
+    class Meta:
+        ordering = ['-created_at']
 
 
 class User(AbstractUser):
@@ -60,9 +62,10 @@ class Product(models.Model):
 class Auction(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     start_time = models.DateTimeField(default=timezone.now)
+    end_time = models.DateTimeField(null=True)
     current_price = models.DecimalField(max_digits=10, decimal_places=0)
     bid_duration = models.IntegerField()
-    last_bidder = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    last_bid = models.ForeignKey(Bid, on_delete=models.SET_NULL, null=True, related_name="auction_last_bid")
 
     class Meta:
         ordering = ['-start_time']
@@ -83,4 +86,3 @@ class Deal(models.Model):
 
     class Meta:
         ordering = ['-date_modified']
-

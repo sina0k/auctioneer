@@ -51,20 +51,15 @@ def generate_fake_auctions(num_auctions, *args, **options):
         )
         products.append(product)
 
-        auction = Auction.objects.create(
-            product=product,
-            start_time=timezone.make_aware(fake.date_time(), timezone.get_current_timezone()),
-            current_price=fake.random_int(min=1, max=1000),
-            bid_duration=fake.random_int(min=10, max=60),
-            last_bidder=user if isinstance(user, User) else None
-        )
-        auctions.append(auction)
+
 
         transaction = Transaction.objects.create(
             payment_number=fake.random_number(digits=10),
             price=fake.random_int(min=1, max=1000)
         )
         transactions.append(transaction)
+
+        fake_number = fake.random_int(min=1, max=20)
 
         for i in range(6):
             deal = Deal.objects.create(
@@ -77,16 +72,30 @@ def generate_fake_auctions(num_auctions, *args, **options):
             )
             deals.append(deal)
 
-        num_bids = fake.random_int(min=1, max=20)
+        auction = Auction.objects.create(
+            product=product,
+            start_time=timezone.make_aware(fake.date_time(), timezone.get_current_timezone()),
+            current_price=fake.random_int(min=1, max=1000),
+            bid_duration=fake.random_int(min=10, max=60),
+        )
+        auctions.append(auction)
 
-        for _ in range(num_bids):
+        these_bids = []
+
+        for _ in range(fake_number):
             bid = Bid.objects.create(
                 price=fake.random_int(min=1, max=1000),
-                time=fake.time_object(),
                 auction=auction,
                 user=user,
             )
             bids.append(bid)
+            these_bids.append(bid)
+
+        sorted_bids = sorted(these_bids, key=lambda bid: bid.created_at)
+
+        newest_bid = sorted_bids[-1] if sorted_bids else None
+        auction.last_bid = newest_bid
+
 
     for user in users:
         user.save()
@@ -119,12 +128,12 @@ def delete_db():
     Auction.objects.all().delete()
     Transaction.objects.all().delete()
     Deal.objects.all().delete()
-    User.objects.all().delete()
+    #User.objects.all().delete()
     Company.objects.all().delete()
 
 
 if __name__ == '__main__':
-    # delete_db()
+    #delete_db()
 
     num_auctions = 60
     generate_fake_auctions(num_auctions)
