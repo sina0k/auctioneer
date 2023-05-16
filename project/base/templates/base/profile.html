@@ -4,6 +4,9 @@
 
 <h2>{{user.username}}</h2>
 
+    {% if user.bio %}
+    <h2>bio: {{user.bio}}</h2>
+{   {% endif %}
 {% if owner_user %}
     <h3>The bids you have placed on auctions:</h3>
     <hr>

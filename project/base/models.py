@@ -36,6 +36,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, null=True)
     phone = models.CharField(max_length=14, null=True)
     bids_number = models.IntegerField(default=0)
+    bio = models.TextField(null=True)
     # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(

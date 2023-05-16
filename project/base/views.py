@@ -3,7 +3,7 @@ from django.db.models import Q
 from .models import Company, Product, Auction, Transaction, Deal, User, Bid
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import UserForm, MyUserCreationForm
+from .forms import UserForm, MyUserCreationForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -88,3 +88,17 @@ def userProfile(request, pk):
     owner_user = user == request.user
     context = {'user': user, 'owner_user': owner_user, 'deals': deals, 'bids': bids}
     return render(request, 'base/profile.html', context)
+
+
+@login_required(login_url='login')
+def updateUser(request):
+    user = request.user
+    form = UserUpdateForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+
+    return render(request, 'base/update_user.html', {'form': form})

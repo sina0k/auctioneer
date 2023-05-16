@@ -15,6 +15,8 @@ urlpatterns = [
     path('register/', views.registerPage, name="register"),
     path('', views.home, name="home"),
     path('profile/<str:pk>', views.userProfile, name="user-profile"),
+    path('update-user', views.updateUser, name="update-user"),
+
     path('auction/<str:pk>/', views.auction, name="auction"),
 ]
 
