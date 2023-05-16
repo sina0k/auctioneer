@@ -4,6 +4,7 @@ from .models import Company, Product, Auction, Transaction, Deal, User, Bid
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
@@ -78,3 +79,12 @@ def auction(request, pk):
     auction = Auction.objects.get(id=pk)
     context = {'auction': auction}
     return render(request, 'base/auction.html', context)
+
+
+def userProfile(request, pk):
+    user = User.objects.get(id=pk)
+    deals = user.deals.all()
+    bids = user.bids.all()
+    owner_user = user == request.user
+    context = {'user': user, 'owner_user': owner_user, 'deals': deals, 'bids': bids}
+    return render(request, 'base/profile.html', context)
