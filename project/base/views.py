@@ -19,19 +19,6 @@ def loginPage(request):
         username = request.POST.get('username').lower()
         password = request.POST.get('password')
 
-        # try:
-        #     user = User.objects.get(username=username)
-        # except:
-        #     messages.error(request, 'User does not exist')
-        #
-        # if user.check_password(password):
-        #     context.update({'user': user})
-        #     login(request, user)
-        #     return redirect(request, 'base/home.html', context)
-        #
-        # else:
-        #     messages.error(request, 'Username OR password does not exit')
-
         try:
             user = User.objects.get(username=username)
         except:
