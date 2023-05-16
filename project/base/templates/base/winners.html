@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+     <h2>Wins within the last 24 hours</h2>
+      {% for deal in won_deals%}
+      <div>
+        <small><a href="{% url 'user-profile' deal.user.id %}">@{{deal.user}} </a>{{deal.date_modified|timesince}}</small>
+        <p>has won: {{deal.product.name}}</p>
+        <p>at price: {{deal.transaction.price}}</p>
+        <hr>
+      </div>
+      {% endfor%}
+
+
+{% endblock content %}

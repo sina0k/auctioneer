@@ -18,6 +18,10 @@ urlpatterns = [
     path('update-user', views.updateUser, name="update-user"),
 
     path('auction/<str:pk>/', views.auction, name="auction"),
+    path('about', views.about, name="about"),
+    path('learn', views.learn, name="learn"),
+    path('winners', views.winners, name="winners"),
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -5,6 +5,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 
 # Create your views here.
@@ -88,6 +90,24 @@ def userProfile(request, pk):
     owner_user = user == request.user
     context = {'user': user, 'owner_user': owner_user, 'deals': deals, 'bids': bids}
     return render(request, 'base/profile.html', context)
+
+
+def about(request):
+    return render(request, 'base/about.html', {})
+
+
+def learn(request):
+    return render(request, 'base/learn.html', {})
+
+
+def winners(request):
+    now = timezone.now()
+    start_time = now - timedelta(hours=24)
+
+    deals_within_a_day = Deal.objects.filter(Q(deal_type='Auction')
+                                    & Q(date_modified__range=(start_time, now)))
+    context = {'won_deals': deals_within_a_day}
+    return render(request, 'base/winners.html', context)
 
 
 @login_required(login_url='login')
