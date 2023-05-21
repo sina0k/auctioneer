@@ -2,6 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q
+
+from .tasks import createNewTaskForAuction
 from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
@@ -86,10 +88,8 @@ def createBid(request, auctionId):
             auction = Auction.objects.get(id=auctionId)
         except ObjectDoesNotExist:
             return HttpResponse('Auction not found!', status=404)
-        # if auction is None:
-        #     return HttpResponse('NOT_FOUND', status=404)
-
-        if request.user.id == auction.last_bid.user.id:
+        # TODO validate if auction start time has arrived or auction is closed
+        if auction.last_bid and request.user.id == auction.last_bid.user.id:
             return HttpResponse("You already are the last bidder in this auction!", status=400)
 
         bid = Bid.objects.create(
@@ -103,6 +103,7 @@ def createBid(request, auctionId):
 
         bid.save()
         auction.save()
+        createNewTaskForAuction(auction)
 
         return redirect(f'/auction/{auctionId}/')
 
