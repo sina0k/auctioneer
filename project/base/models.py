@@ -65,10 +65,10 @@ class Product(models.Model):
 class Auction(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     start_time = models.DateTimeField(default=timezone.now)
-    end_time = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True, blank=True)
     current_price = models.DecimalField(max_digits=10, decimal_places=0)
     bid_duration = models.IntegerField()
-    last_bid = models.ForeignKey(Bid, on_delete=models.SET_NULL, null=True, related_name="auction_last_bid")
+    last_bid = models.ForeignKey(Bid, on_delete=models.SET_NULL, null=True, blank=True, related_name="auction_last_bid")
 
     class Meta:
         ordering = ['-start_time']

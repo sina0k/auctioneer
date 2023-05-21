@@ -5,15 +5,14 @@ from django.utils import timezone
 tasks = dict()
 
 def createNewTaskForAuction(auction):
-    print('here')
     try:
         task = tasks[auction.id]
         task.cancel()
     except KeyError:
         pass
-    print('and here')
 
     tasks[auction.id] = threading.Timer(auction.bid_duration, closeAuction, args=(auction, ))
+    tasks[auction.id].start()
 
 
 def closeAuction(auction):

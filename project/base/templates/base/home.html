@@ -1,75 +1,74 @@
-{% extends 'main.html' %}
-
-{% block content %}
-
+{% extends 'main.html' %} {% block content %}
 
 <style>
-    .home-container {
-        display: grid;
-        grid-template-columns: 4fr 1fr;
-    }
+  .home-container {
+    display: grid;
+    grid-template-columns: 4fr 1fr;
+  }
 </style>
 
-
 <div class="home-container">
-
   <div>
-      <div>
-        <h3>Browse Items</h3>
-        <form method="GET" action="{% url 'home' %}">
-        <input type="text" name="q" placeholder="Search Auctions..."/>
-        </form>
-        <hr>
-      </div>
-    <h2>There are {{auction_count}} auctions available</h2>
-    <hr>
-    <body>
-  <div class="container">
-    <div class="auction-grid">
-      {% for auction in auctions %}
-        {% if forloop.counter0|divisibleby:4 %}
-          <div class="auction-column">
-        {% endif %}
-        <div class="auction-card">
-          <a href="{% url 'auction' auction.id %}"><h2>{{ auction.product.name }} </h2> </a>
-          <p>Buying Price: <span class="price">{{ auction.current_price }}</span></p>
-          <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
-          <p>Last Bidder: {% if auction.last_bidder %}{{ auction.last_bidder.username }}{% else %}None{% endif %}</p>
-          <form method="POST" action="{% url 'create-bid' auction.id %}">
-            {% csrf_token %}
-            <button type="submit">Bid Now!</button>
-          </form>
-          <!-- Add more details or customizations here -->
-        </div>
-        {% if forloop.counter|divisibleby:4 or forloop.last %}
-          </div>
-        {% endif %}
-        <hr>
-
-      {% endfor %}
-      {% if not auctions %}
-        <p>No auctions available.</p>
-      {% endif %}
+    <div>
+      <h3>Browse Items</h3>
+      <form method="GET" action="{% url 'home' %}">
+        <input type="text" name="q" placeholder="Search Auctions..." />
+      </form>
+      <hr />
     </div>
-  </div>
-</body>
+    <h2>There are {{auction_count}} auctions available</h2>
+    <hr />
+    <body>
+      <div class="container">
+        <div class="auction-grid">
+          {% for auction in auctions %} {% if forloop.counter0|divisibleby:4 %}
+          <div class="auction-column">
+            {% endif %}
+            <div class="auction-card">
+              <a href="{% url 'auction' auction.id %}"
+                ><h2>{{ auction.product.name }}</h2>
+              </a>
+              <p>
+                Buying Price:
+                <span class="price">{{ auction.current_price }}</span>
+              </p>
+              <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
+              <p>
+                Last Bidder: {% if auction.last_bid %} 
+                {{ auction.last_bid.user.username }} {% else %}None{% endif %}
+              </p>
+              <form method="POST" action="{% url 'create-bid' auction.id %}">
+                {% csrf_token %}
+                <button type="submit">Bid Now!</button>
+              </form>
+              <!-- Add more details or customizations here -->
+            </div>
+            {% if forloop.counter|divisibleby:4 or forloop.last %}
+          </div>
+          {% endif %}
+          <hr />
+
+          {% endfor %} {% if not auctions %}
+          <p>No auctions available.</p>
+          {% endif %}
+        </div>
+      </div>
+    </body>
   </div>
   <div>
-     <h2>Recent Wins</h2>
-      {% for deal in won_deals%}
-      <div>
-        <small><a href="{% url 'user-profile' deal.user.id %}">@{{deal.user}} </a>{{deal.date_modified|timesince}}</small>
-        <p>has won: {{deal.product.name}}</p>
-        <p>at price: {{deal.transaction.price}}</p>
-        <hr>
-      </div>
+    <h2>Recent Wins</h2>
+    {% for deal in won_deals%}
+    <div>
+      <small
+        ><a href="{% url 'user-profile' deal.user.id %}">@{{deal.user}} </a
+        >{{deal.date_modified|timesince}}</small
+      >
+      <p>has won: {{deal.product.name}}</p>
+      <p>at price: {{deal.transaction.price}}</p>
+      <hr />
+    </div>
 
-      {% endfor%}
+    {% endfor%}
   </div>
-
-
-
 </div>
 {% endblock content %}
-
-
