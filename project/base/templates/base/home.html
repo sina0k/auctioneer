@@ -35,6 +35,10 @@
           <p>Buying Price: <span class="price">{{ auction.current_price }}</span></p>
           <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
           <p>Last Bidder: {% if auction.last_bidder %}{{ auction.last_bidder.username }}{% else %}None{% endif %}</p>
+          <form method="POST" action="{% url 'create-bid' auction.id %}">
+            {% csrf_token %}
+            <button type="submit">Bid Now!</button>
+          </form>
           <!-- Add more details or customizations here -->
         </div>
         {% if forloop.counter|divisibleby:4 or forloop.last %}

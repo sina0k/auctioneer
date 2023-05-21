@@ -4,6 +4,8 @@ from django.utils import timezone
 from enum import Enum
 
 
+BID_STEP = 1000
+
 class DealType(Enum):
     AUCTION = 'Auction'
     BUY = 'Buy'

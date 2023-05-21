@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import User
+from .models import User, Bid
 
 
 class MyUserCreationForm(UserCreationForm):

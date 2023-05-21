@@ -21,6 +21,7 @@ urlpatterns = [
     path('about', views.about, name="about"),
     path('learn', views.learn, name="learn"),
     path('winners', views.winners, name="winners"),
+    path('create-bid/<str:auctionId>', views.createBid, name="create-bid")
 
 ]
 

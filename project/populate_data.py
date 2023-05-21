@@ -133,11 +133,7 @@ def delete_db():
 
 
 if __name__ == '__main__':
-    #delete_db()
 
     num_auctions = 60
     generate_fake_auctions(num_auctions)
-    # users = User.objects.all()
-    # u = random.choice(users) if users else None
-    #
-    # print(u.bids)
+

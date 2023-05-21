@@ -1,6 +1,8 @@
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q
-from .models import Company, Product, Auction, Transaction, Deal, User, Bid
+from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm, UserUpdateForm
@@ -77,6 +79,35 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
+@login_required(login_url='login')
+def createBid(request, auctionId):
+    if request.method == 'POST':
+        try:
+            auction = Auction.objects.get(id=auctionId)
+        except ObjectDoesNotExist:
+            return HttpResponse('Auction not found!', status=404)
+        # if auction is None:
+        #     return HttpResponse('NOT_FOUND', status=404)
+
+        if request.user.id == auction.last_bid.user.id:
+            return HttpResponse("You already are the last bidder in this auction!", status=400)
+
+        bid = Bid.objects.create(
+            auction=auction,
+            user=request.user,
+            price=auction.current_price
+        )
+
+        auction.current_price += BID_STEP
+        auction.last_bid = bid
+
+        bid.save()
+        auction.save()
+
+        return redirect(f'/auction/{auctionId}/')
+
+
+
 def auction(request, pk):
     auction = Auction.objects.get(id=pk)
     context = {'auction': auction}
@@ -105,7 +136,7 @@ def winners(request):
     start_time = now - timedelta(hours=24)
 
     deals_within_a_day = Deal.objects.filter(Q(deal_type='Auction')
-                                    & Q(date_modified__range=(start_time, now)))
+                                             & Q(date_modified__range=(start_time, now)))
     context = {'won_deals': deals_within_a_day}
     return render(request, 'base/winners.html', context)
 
