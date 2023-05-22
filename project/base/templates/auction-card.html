@@ -1,0 +1,83 @@
+<div class="col-6 col-lg-4">
+  <a class="text-decoration-none text-dark" href="{% url 'auction' auction.id %}">
+    <div class="card p-2 mb-4">
+      <div class="img-container">
+        <img
+          src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {{ "https://aqua-air.co.uk/wp-content/uploads/woocommerce-placeholder-600x600.png" }} {% endif %}"
+          class="card-img-top"
+          alt="img not found!"
+        />
+        <img hidden id="{{ auction.id }}-sold-image" class="sold-image" src="https://www.pngmart.com/files/7/Sold-PNG-Transparent-Image.png" alt="">
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">{{ auction.product.name }}</h3>
+        <div class="card-text">
+          <div>
+            Buying Price: {{ auction.current_price }}
+          </div>
+          <div>    
+            {% if auction.end_time %}
+              Winner:
+            {% else %}
+              Last Bidder:
+            {% endif %}
+
+            {% if auction.last_bid %}
+            <a href="{% url 'user-profile' auction.last_bid.user.id %}">
+              {{ auction.last_bid.user.username }}
+            </a>
+            {% else %} None {% endif %}
+          </div>
+          <h4 id="{{ auction.id }}-time" class="w-100 text-center">
+            {% if not auction.last_bid %}
+              Not started yet!
+            {% elif auction.end_time %}
+              Sold!
+            {% else %}
+              00:00
+            {% endif %}
+          </h4>
+        </div>
+
+        <div class="d-flex flex-column align-items-stretch gap-2">
+          <form method="POST" action="{% url 'create-bid' auction.id %}">
+            {% csrf_token %}
+            <button 
+            {% if auction.end_time or auction.last_bid and auction.last_bid.user.id == request.user.id %}
+              disabled
+            {% endif %}
+            class="btn btn-success w-100"
+            type="submit">
+              Bid!
+            </button>
+          </form>
+          <a href="buy" class="btn btn-info">Buy Now!</a>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+
+{% if auction.end_time %}
+  <script>
+    document.getElementById("{{ auction.id }}-sold-image").hidden = false;
+  </script>
+{% endif %}
+
+{% if auction.last_bid and not auction.end_time %}
+  <script>
+    finishTimes[{{ auction.id }}] = new Date("{{ auction.last_bid.created_at|date:'Y-m-d\TH:i:s\Z' }}");
+    finishTimes[{{ auction.id }}].setSeconds(finishTimes[{{ auction.id }}].getSeconds() + {{ auction.bid_duration }});
+    intervals[{{ auction.id }}] = setInterval(() => {
+      var remainingTime = Math.floor((finishTimes[{{ auction.id }}] - Date.now()) / 1000);
+      if (remainingTime < 0) {
+        clearInterval(intervals[{{ auction.id }}]);
+        document.getElementById("{{ auction.id }}-sold-image").hidden = false;
+        document.getElementById("{{ auction.id }}-time").innerText = "Sold!"
+        return;
+      }
+      var remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
+      document.getElementById("{{ auction.id }}-time").innerText = remainingTimeString;
+    }, 1000);
+  </script>
+{% endif %}

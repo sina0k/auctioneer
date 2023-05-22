@@ -16,6 +16,5 @@ def createNewTaskForAuction(auction):
 
 
 def closeAuction(auction):
-    print(auction.id)
     auction.end_time = timezone.now()
     auction.save()

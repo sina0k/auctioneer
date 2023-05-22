@@ -10,6 +10,18 @@ body {
   border-right: solid 1px black;
 }
 
+.img-container {
+  position: relative;
+}
+
+.sold-image {
+  position: absolute;
+  width: 60%;
+  height: 60%;
+  top: 20%;
+  left: 20%;
+}
+
 @media (max-width: 992px) {
   /* col-lg breakpoint */
   .auctions-container {
