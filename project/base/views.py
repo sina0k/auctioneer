@@ -67,6 +67,9 @@ def logoutUser(request):
 
 
 def home(request):
+    if request.method == "POST":
+        pass
+    
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
     auctions = Auction.objects.filter(
@@ -105,7 +108,7 @@ def createBid(request, auctionId):
         auction.save()
         createNewTaskForAuction(auction)
 
-        return redirect(f'/auction/{auctionId}/')
+        return redirect('/')
 
 
 

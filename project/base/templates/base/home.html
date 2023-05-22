@@ -8,8 +8,8 @@
 <div class="container">
   <br />
   <div class="row justify-content-center">
-    <div class="col-12 col-lg-8 auctions-container">
-      <h2>There are {{ auction_count }} auctions available:</h2>
+    <div class="col-12 col-lg-10 auctions-container">
+      <h2>{{ auction_count }} تعداد مزایده موجود است:</h2>
       <div class="row">
         {% for auction in auctions %}
           {% include 'auction-card.html' with auction=auction %}
@@ -17,8 +17,8 @@
       </div>
     </div>
 
-    <div class="col-12 col-lg-4 text-center">
-      <h2>Winners</h2>
+    <div class="col-12 col-lg-2 text-center">
+      <h2>برندگان</h2>
     </div>
   </div>
 </div>

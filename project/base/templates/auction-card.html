@@ -7,32 +7,32 @@
           class="card-img-top"
           alt="img not found!"
         />
-        <img hidden id="{{ auction.id }}-sold-image" class="sold-image" src="https://www.pngmart.com/files/7/Sold-PNG-Transparent-Image.png" alt="">
+        <img hidden id="{{ auction.id }}-sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
       </div>
       <div class="card-body">
         <h3 class="card-title">{{ auction.product.name }}</h3>
         <div class="card-text">
           <div>
-            Buying Price: {{ auction.current_price }}
+            قیمت: {{ auction.current_price }}
           </div>
           <div>    
             {% if auction.end_time %}
-              Winner:
+              برنده:
             {% else %}
-              Last Bidder:
+              آخرین ؟؟؟:
             {% endif %}
 
             {% if auction.last_bid %}
             <a href="{% url 'user-profile' auction.last_bid.user.id %}">
               {{ auction.last_bid.user.username }}
             </a>
-            {% else %} None {% endif %}
+            {% else %} هیچکس {% endif %}
           </div>
           <h4 id="{{ auction.id }}-time" class="w-100 text-center">
             {% if not auction.last_bid %}
-              Not started yet!
+              هنوز شروع نشده!
             {% elif auction.end_time %}
-              Sold!
+              فروخته شد!
             {% else %}
               00:00
             {% endif %}
@@ -48,10 +48,10 @@
             {% endif %}
             class="btn btn-success w-100"
             type="submit">
-              Bid!
+              بید
             </button>
           </form>
-          <a href="buy" class="btn btn-info">Buy Now!</a>
+          <a href="buy" class="btn btn-info">اکنون بخرید</a>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
 </head>
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+<nav class="navbar navbar-expand-sm bg-body-tertiary">
   <div class="container-fluid">
     <button
       class="navbar-toggler"
@@ -20,36 +20,50 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav mb-2 mb-lg-0" style="margin-left: auto">
         <li class="nav-item">
           <a
             class="nav-link active"
             aria-current="page"
             href="{% url 'home' %}"
           >
-            Home
+            خانه
           </a>
         </li>
+        {% if request.user.is_authenticated %}
+        <li>
+          <a class="nav-link" href="{% url 'user-profile' user.id %}"
+            >پروفایل</a
+          >
+        </li>
+        {% endif %}
+
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'winners' %}"> Winners </a>
+          <a class="nav-link" href="{% url 'winners' %}"> برندگان </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}"> About </a>
+          <a class="nav-link" href="{% url 'about' %}"> درباره ما </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'learn' %}"> Tips & Tricks </a>
+          <a class="nav-link" href="{% url 'learn' %}"> راهنمایی </a>
         </li>
+
+        {% if request.user.is_authenticated %}
+        <a class="btn btn-outline-danger" href="{% url 'logout' %}">خروج</a>
+        {% else %}
+        <a class="btn btn-outline-success" href="{% url 'login' %}">ورود</a>
+        {% endif %}
       </ul>
       <form class="d-flex" role="search" method="GET" action="{% url 'home' %}">
         <input
           class="form-control me-2"
           type="search"
-          aria-label="Search"
+          aria-label="جستجو"
           type="text"
           name="q"
-          placeholder="Search Auctions..."
+          placeholder="جستجو در مزایده‌ها..."
         />
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="btn btn-outline-success" type="submit">جستجو</button>
       </form>
     </div>
   </div>
