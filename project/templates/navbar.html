@@ -1,34 +1,80 @@
 {% load static %}
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auction Website</title>
-    <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auction Website</title>
+  <link rel="stylesheet" href="{% static 'styles/style.css' %}" />
 </head>
 
-
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link active"
+            aria-current="page"
+            href="{% url 'home' %}"
+          >
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'winners' %}"> Winners </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'about' %}"> About </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'learn' %}"> Tips & Tricks </a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search" method="GET" action="{% url 'home' %}">
+        <input
+          class="form-control me-2"
+          type="search"
+          aria-label="Search"
+          type="text"
+          name="q"
+          placeholder="Search Auctions..."
+        />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+{% comment %}
 <header>
-    <h1>Welcome to Your Penny Auction Website</h1>
-    <nav>
+  <h1>Welcome to Your Penny Auction Website</h1>
+  <nav>
+    {% if request.user.is_authenticated %}
+    <p>Hello {{request.user.name}}</p>
+    <a href="{% url 'user-profile' user.id %}">Profile Panel</a>
+    <hr />
+    <a href="{% url 'update-user'%}">Edit Profile</a>
+    <hr />
+    <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
 
-        {% if request.user.is_authenticated %}
-        <p>Hello {{request.user.name}}</p>
-        <a href="{% url 'user-profile' user.id %}">Profile Panel</a>
-        <hr>
-        <a href="{% url 'update-user'%}">Edit Profile</a>
-        <hr>
-        <a href="{% url 'logout' %}">Logout</a>
-        {% else %}
-        <a href="{% url 'login' %}">Login</a>
-        {% endif %}
-
-        <ul>
-
-            <li><a href="{%url 'home'%}">Home</a></li>
-            <li><a href="{%url 'winners'%}">Winners</a></li>
-            <li><a href="{%url 'about'%}">About</a></li>
-            <li><a href="{%url 'learn'%}">Tips & Tricks</a></li>
-
-        </ul>
-    </nav>
+    <ul>
+      <li><a href="{%url 'home'%}">Home</a></li>
+      <li><a href="{%url 'winners'%}">Winners</a></li>
+      <li><a href="{%url 'about'%}">About</a></li>
+      <li><a href="{%url 'learn'%}">Tips & Tricks</a></li>
+    </ul>
+  </nav>
 </header>
+{% endcomment %}

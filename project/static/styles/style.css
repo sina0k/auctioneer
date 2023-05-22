@@ -2,8 +2,22 @@
 
 /* Reset default styles */
 
-body{
+body {
   background-color: powderblue;
+}
+
+.auctions-container {
+  border-right: solid 1px black;
+}
+
+@media (max-width: 992px) {
+  /* col-lg breakpoint */
+  .auctions-container {
+    border-right: none;
+    border-bottom: solid 1px black;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
 }
 
 /*body, h1, h2, h3, p, img, a {*/
