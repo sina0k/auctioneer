@@ -33,12 +33,13 @@ class Bid(models.Model):
 
 
 class User(AbstractUser):
-    name = models.CharField(max_length=200, null=True)
-    address = models.TextField(null=True)
-    email = models.EmailField(unique=True, null=True)
-    phone = models.CharField(max_length=14, null=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    address = models.TextField(null=True, blank=True)
+    email = models.EmailField(unique=True, null=True, blank=True)
+    phone = models.CharField(max_length=14, null=True, blank=True)
     bids_number = models.IntegerField(default=0)
-    bio = models.TextField(null=True)
+    bio = models.TextField(null=True, blank=True)
+    avatar = models.ImageField(null=True, blank=True)
     # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(

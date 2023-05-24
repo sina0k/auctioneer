@@ -1,41 +1,67 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 
 {% block content %}
 
-<h2>{{user.username}}</h2>
-
+<div class="container d-flex flex-column align-items-center mt-4">
+    <img class="rounded-circle" width="10%" height="10%" src="{% if user.avatar %} {{ user.avatar }} {% else %} {{ "https://www.pngkit.com/png/full/126-1262807_instagram-default-profile-picture-png.png" }} {% endif %}" alt="">
+    <h1>{{ user.username }}</h1>
+    
     {% if user.bio %}
-    <h2>bio: {{user.bio}}</h2>
-{   {% endif %}
-{% if owner_user %}
-    <h3>The bids you have placed on auctions:</h3>
-    <hr>
-    {% for bid in bids %}
-        <div>
-            <small>{{bid.auction.product.name}} </small>
-            <p>at price: {{bid.auction.current_price}}</p>
-            <p>at: {{bid.created_at}}</p>
-            <hr>
-        </div>
-    {% endfor %}
-{% endif %}
+    <h6>{{ user.bio }}</h6>
+    {% endif %}
 
     {% if owner_user %}
-        <h3>The Deals you have made on this site:</h3>
-    {% else %}
-        <h3>The Deals {{user.username}} have made on this site:</h3>
-
+    <a href="{% url 'update-user' %}" class="btn btn-info">ویرایش پروفایل</a>
     {% endif %}
-    <hr>
 
-    {% for deal in deals %}
-        <div>
-            <small>@{{deal.product.name}} {{deal.date_modified}} ago</small>
-            <p>by: {{deal.deal_type}}ing</p>
-            <p>at price: {{deal.transaction.price}}</p>
-            <p>Item's real price:{{deal.product.price}}</p>
-            <hr>
+    <br />
+
+    <div class="accordion w-100" id="accordionExample">
+        {% if owner_user %}
+            <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                پیشنهادهای شما
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    {% for bid in bids %}
+                        <div>
+                            <p>{{ bid.auction.product.name }}</p>
+                            <p>با قیمت: {{ bid.auction.current_price }}</p>
+                            <p>در تاریخ: {{ bid.created_at }}</p>
+                            <hr />
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            </div>
+        {% endif %}
+        
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              معاملات
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                {% for deal in deals %}
+                    <div>
+                        <small>@{{ deal.product.name }}، {{ deal.date_modified }} پیش</small>
+                        <p>نوع معامله: {{ deal.deal_type }}</p>
+                        <p>با قیمت: {{ deal.transaction.price }}</p>
+                        <p>قیمت واقعی محصول: {{ deal.product.price }}</p>
+                        <hr>
+                    </div>
+                {% empty %}
+                    معامله‌ای وجود ندارد!
+                {% endfor %}
+            </div>
+          </div>
         </div>
-    {% endfor %}
+    </div>
+</div>
 
 {% endblock content %}

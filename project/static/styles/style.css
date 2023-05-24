@@ -29,6 +29,10 @@ nav {
   left: 5%;
 }
 
+.accordion-button:after {
+  margin-left: unset !important;
+}
+
 @media (max-width: 768px) {
   .auctions-container {
     border-left: none;

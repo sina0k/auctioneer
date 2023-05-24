@@ -39,4 +39,4 @@ class UserUpdateForm(ModelForm):
     class Meta:
         model = User
         #DONT FORGET AVATAR IN THE FIELDS
-        fields = ['name', 'username', 'email', 'address', 'phone', 'bio']
+        fields = ['name', 'username', 'email', 'address', 'phone', 'bio', 'avatar']

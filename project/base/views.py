@@ -76,7 +76,10 @@ def home(request):
     )
 
     won_deals = Deal.objects.filter(deal_type='Auction')[:10]
-    active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
+    if request.user.is_authenticated:
+        active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
+    else:
+        active_auctions = None
     context = {'auctions': auctions, 'won_deals': won_deals, 'active_auctions': active_auctions}
     return render(request, 'base/home.html', context)
 
@@ -115,7 +118,7 @@ def createBid(auctionId, user):
 def auction(request, pk):
     if request.method == "POST":
         if not request.user.is_authenticated:
-            redirect('/login/')
+            return redirect('/login/')
         createBid(pk, request.user)
     auction = Auction.objects.get(id=pk)
     context = {'auction': auction}
