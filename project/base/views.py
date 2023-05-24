@@ -67,9 +67,6 @@ def logoutUser(request):
 
 
 def home(request):
-    if request.method == "POST":
-        pass
-    
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
     auctions = Auction.objects.filter(
@@ -85,31 +82,34 @@ def home(request):
 
 
 @login_required(login_url='login')
-def createBid(request, auctionId):
+def createBidHomePage(request, auctionId):
     if request.method == 'POST':
-        try:
-            auction = Auction.objects.get(id=auctionId)
-        except ObjectDoesNotExist:
-            return HttpResponse('Auction not found!', status=404)
-        # TODO validate if auction start time has arrived or auction is closed
-        if auction.last_bid and request.user.id == auction.last_bid.user.id:
-            return HttpResponse("You already are the last bidder in this auction!", status=400)
-
-        bid = Bid.objects.create(
-            auction=auction,
-            user=request.user,
-            price=auction.current_price
-        )
-
-        auction.current_price += BID_STEP
-        auction.last_bid = bid
-
-        bid.save()
-        auction.save()
-        createNewTaskForAuction(auction)
+        createBid(auctionId, request.user)
 
         return redirect('/')
+    
 
+def createBid(auctionId, user):
+    try:
+        auction = Auction.objects.get(id=auctionId)
+    except ObjectDoesNotExist:
+        return HttpResponse('Auction not found!', status=404)
+    # TODO validate if auction start time has arrived or auction is closed
+    if auction.last_bid and user.id == auction.last_bid.user.id:
+        return HttpResponse("You already are the last bidder in this auction!", status=400)
+
+    bid = Bid.objects.create(
+        auction=auction,
+        user=user,
+        price=auction.current_price
+    )
+
+    auction.current_price += BID_STEP
+    auction.last_bid = bid
+
+    bid.save()
+    auction.save()
+    createNewTaskForAuction(auction)
 
 
 def auction(request, pk):

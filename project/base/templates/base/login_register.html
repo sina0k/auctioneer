@@ -1,37 +1,72 @@
-{% extends 'main.html' %}
-
+{% extends "main.html" %}
+{% load static %}
 {% block content %}
 
+<div class="login-container">
+    <div class="container h-100">
+        <div class="row align-items-center h-100">
+            <div class="col-12 col-md-6">
+                {% if page == 'login' %}
+                <form method="post" action="" class="d-flex flex-column align-items-stretch bg-light p-3 rounded">
+                    {% csrf_token %}
 
-{% if page == 'login' %}
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
+                    <div class="form-group">
+                        <label for="username">نام کاربری</label>
+                        <input type="text" name="username" class="form-control" id="username">
+                    </div>
 
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Enter Username" />
+                    <br />
 
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Enter Password" />
+                    <div class="form-group">
+                        <label for="password">رمز عبور</label>
+                        <input type="password" name="password" class="form-control" id="password">
+                    </div>
+                    
+                    <br />
+                    
+                    <button type="submit" class="btn btn-primary">ورود</button>
 
-        <input type="submit" value="Login" />
-    </form>
+                    <br />
 
-    <p>havent signed up yet?</p>
-    <a href="{% url 'register' %}">Sign up</a>
+                    <div class="text-center">
+                        حساب کاربری ندارید؟
+                        <a href="{% url 'register' %}">ثبت‌نام</a>
+                    </div>
+                </form>
+                {% else %}
+                <form method="post" action="" class="d-flex flex-column align-items-stretch bg-light p-3 rounded">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="form-group">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                        </div>
+
+                        <br />
+                    {% endfor %}
+                    
+                    <br />
+
+                    <button type="submit" class="btn btn-primary">ثبت‌نام</button>
+
+                    <br />
+
+                    <div class="text-center">
+                        حساب کاربری دارید؟
+                        <a href="{% url 'login' %}">ورود</a>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+            <div class="col-6 d-md-block d-none h-100">
+                <img width="100%" height="100%" src="{% static 'images/login.png' %}" alt="">
+            </div>
+        </div>
+    </div>
 </div>
-
-{% else %}
-
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Register" />
-    </form>
-    <p>Already signed up yet?</p>
-    <a href="{% url 'login' %}">Login</a>
-</div>
-{% endif %}
 
 {% endblock content %}

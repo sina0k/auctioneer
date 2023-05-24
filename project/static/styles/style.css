@@ -4,6 +4,15 @@
 
 body {
   background-color: powderblue;
+  height: 100vh;
+}
+
+nav {
+  height: 64px !important;
+}
+
+.login-container {
+  height: calc(100% - 64px);
 }
 
 .auctions-container {
@@ -16,19 +25,21 @@ body {
 
 .sold-image {
   position: absolute;
-  width: 90%;
-  height: 90%;
   top: 5%;
   left: 5%;
 }
 
-@media (max-width: 992px) {
-  /* col-lg breakpoint */
+@media (max-width: 768px) {
   .auctions-container {
     border-left: none;
     border-bottom: solid 1px black;
     margin-bottom: 8px;
     padding-bottom: 8px;
+  }
+
+  .login-container {
+    background-image: url("/static/images/login.png");
+    background-size: 100% 100%;
   }
 }
 

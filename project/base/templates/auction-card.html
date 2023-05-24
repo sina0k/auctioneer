@@ -1,13 +1,15 @@
-<div class="col-6 col-lg-4">
+<div class="col-6 col-md-4">
   <a class="text-decoration-none text-dark" href="{% url 'auction' auction.id %}">
     <div class="card p-2 mb-4">
       <div class="img-container">
         <img
+          width="100%"
+          height="100%"
           src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {{ "https://aqua-air.co.uk/wp-content/uploads/woocommerce-placeholder-600x600.png" }} {% endif %}"
           class="card-img-top"
           alt="img not found!"
         />
-        <img hidden id="{{ auction.id }}-sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
+        <img hidden width="90%" height="90%" id="{{ auction.id }}-sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
       </div>
       <div class="card-body">
         <h3 class="card-title">{{ auction.product.name }}</h3>
@@ -40,7 +42,7 @@
         </div>
 
         <div class="d-flex flex-column align-items-stretch gap-2">
-          <form method="POST" action="{% url 'create-bid' auction.id %}">
+          <form method="post" action="{% url 'create-bid-home' auction.id %}">
             {% csrf_token %}
             <button 
             {% if auction.end_time or auction.last_bid and auction.last_bid.user.id == request.user.id %}
@@ -51,7 +53,7 @@
               بید
             </button>
           </form>
-          <a href="buy" class="btn btn-info">اکنون بخرید</a>
+          <a href="#" class="btn btn-info">اکنون بخرید</a>
         </div>
       </div>
     </div>
@@ -73,7 +75,7 @@
       if (remainingTime < 0) {
         clearInterval(intervals[{{ auction.id }}]);
         document.getElementById("{{ auction.id }}-sold-image").hidden = false;
-        document.getElementById("{{ auction.id }}-time").innerText = "Sold!"
+        document.getElementById("{{ auction.id }}-time").innerText = "فروخته شد!"
         return;
       }
       var remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
