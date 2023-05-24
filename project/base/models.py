@@ -39,7 +39,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=14, null=True, blank=True)
     bids_number = models.IntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
-    avatar = models.ImageField(null=True, blank=True)
+    avatar = models.ImageField(upload_to="uploads/users/", null=True, blank=True)
     # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(
@@ -61,7 +61,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=0)
     description = models.TextField(null=True, blank=True)
     category = models.CharField(max_length=50, choices=[(ca.value, ca.name) for ca in Category])
-    image = models.ImageField(upload_to="uploads/", null=True, blank=True)
+    image = models.ImageField(upload_to="uploads/products/", null=True, blank=True)
 
 
 class Auction(models.Model):

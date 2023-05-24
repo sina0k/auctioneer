@@ -1,17 +1,30 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 
 {% block content %}
 
-<hr>
-<h3>HERE YOU CAN CHANGE YOUR PROFILE</h3>
-<hr>
+<div class="container my-4 py-4">
+    <h3>ویرایش اطلاعات کاربری</h3>
+    <hr />
 
-<div>
-    <form method="POST" action="">
+    <form method="post" action="" enctype="multipart/form-data">
         {% csrf_token %}
-        {{form.as_p}}
-        <input type="submit" value="Edit" />
-    </form>
-    </div>
 
-{% endblock %}
+        {% for field in form %}
+            <div class="form-group text-right">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                    <small class="form-text text-muted">{{ field.help_text }}</small>
+                {% endif %}
+            </div>
+
+            <br />
+        {% endfor %}
+
+        <div class="w-100 text-center">
+            <button class="btn btn-success w-50 mb-4" type="submit">ویرایش</button>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}
