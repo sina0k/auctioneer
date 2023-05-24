@@ -1,19 +1,18 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 
 {% block content %}
-
 
 <div class="container">
     <div>
         <div class="auction-card">
-            <h1>{{ auction.product.name }} by {{auction.product.company.name}}</h1>
+            <h1>{{ auction.product.name }} by {{ auction.product.company.name }}</h1>
             <h2>Buying Price: <span class="price">{{ auction.current_price }}</span></h2>
             <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
             <p>Last Bidder: {% if auction.last_bid %}{{ auction.last_bid.user.username }}{% else %}None{% endif %}</p>
-            <p>Product Description: {{auction.product.description}}</p>
-            <p>Company Description: {{auction.product.company.description}}</p>
-            <p>Product Category: {{auction.product.category}}</p>
-            <form method="POST" action="{% url 'create-bid' auction.id %}">
+            <p>Product Description: {{ auction.product.description }}</p>
+            <p>Company Description: {{ auction.product.company.description }}</p>
+            <p>Product Category: {{ auction.product.category }}</p>
+            <form method="post" action="{% url 'create-bid-home' auction.id %}">
               {% csrf_token %}
               <button type="submit">Bid Now!</button>
             </form>
@@ -24,5 +23,3 @@
 
 </div>
 {% endblock content %}
-
-

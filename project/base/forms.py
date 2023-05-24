@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import User, Bid
+from .models import User
 
 
 class MyUserCreationForm(UserCreationForm):
@@ -14,7 +14,7 @@ class MyUserCreationForm(UserCreationForm):
         self.fields['name'].widget.attrs['class'] = 'form-control custom-class'
 
         self.fields['username'].label = 'نام کاربری'
-        self.fields['username'].help_text = '۱۵۰ کاراکتر یا کمتر، حروف، اعداد و یا @/./+/-/_'
+        self.fields['username'].help_text = 'حروف، اعداد و یا @/./+/-/_'
         self.fields['username'].widget.attrs['class'] = 'form-control custom-class'
 
         self.fields['email'].label = 'ایمیل'
