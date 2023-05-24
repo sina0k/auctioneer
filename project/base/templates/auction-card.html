@@ -7,7 +7,7 @@
           height="100%"
           src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {{ "https://aqua-air.co.uk/wp-content/uploads/woocommerce-placeholder-600x600.png" }} {% endif %}"
           class="card-img-top"
-          alt="img not found!"
+          alt=""
         />
         <img hidden width="90%" height="90%" id="{{ auction.id }}-sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
       </div>
@@ -21,7 +21,7 @@
             {% if auction.end_time %}
               برنده:
             {% else %}
-              آخرین ؟؟؟:
+              آخرین پیشنهاد:
             {% endif %}
 
             {% if auction.last_bid %}
@@ -50,7 +50,7 @@
             {% endif %}
             class="btn btn-success w-100"
             type="submit">
-              بید
+              پیشنهاد
             </button>
           </form>
           <a href="#" class="btn btn-info">اکنون بخرید</a>
