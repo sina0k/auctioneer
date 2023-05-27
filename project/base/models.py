@@ -55,6 +55,22 @@ class Discount(models.Model):
     description = models.TextField(null=True, blank=True)
 
 
+class BuyingProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+
+
+class ShoppingCart(models.Model):
+    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='shopping_cart')
+    buying_products = models.ManyToManyField(BuyingProduct, blank=True)
+
+    def __str__(self):
+        return f"Shopping Cart for {self.user.username}"
+
+
 class User(AbstractUser):
     name = models.CharField(max_length=200, null=True, blank=True)
     address = models.TextField(null=True, blank=True)
@@ -63,7 +79,7 @@ class User(AbstractUser):
     bids_number = models.IntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(upload_to="uploads/users/", null=True, blank=True)
-    shopping_cart = models.ManyToManyField(Product, blank=True)
+    # shopping_cart = models.ManyToManyField(Product, blank=True)
     # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(
@@ -98,7 +114,7 @@ class Deal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
     deal_type = models.CharField(max_length=50, choices=[(dt.value, dt.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)
-    discount = models.OneToOneField(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name='deal')
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name='deals')
 
     class Meta:
         ordering = ['-date_modified']

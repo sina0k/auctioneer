@@ -75,12 +75,11 @@ def home(request):
         Q(product__description__icontains=q)
     )
 
-    won_deals = Deal.objects.filter(deal_type='Auction')[:10]
     if request.user.is_authenticated:
         active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
     else:
         active_auctions = None
-    context = {'auctions': auctions, 'won_deals': won_deals, 'active_auctions': active_auctions}
+    context = {'auctions': auctions, 'active_auctions': active_auctions}
     return render(request, 'base/home.html', context)
 
 
@@ -121,12 +120,17 @@ def createBid(auctionId, user):
 
 
 def auction(request, pk):
+    auction = Auction.objects.get(id=pk)
+    context = {'auction': auction}
+
     if request.method == "POST":
+        if auction.end_time is not None and auction.end_time <= timezone.now():
+            print("Auction has ended")
+            return render(request, 'base/auction.html', context)
         if not request.user.is_authenticated:
             return redirect('/login/')
         createBid(pk, request.user)
-    auction = Auction.objects.get(id=pk)
-    context = {'auction': auction}
+
     return render(request, 'base/auction.html', context)
 
 
@@ -153,6 +157,7 @@ def winners(request):
 
     deals_within_a_day = Deal.objects.filter(Q(deal_type='Auction')
                                              & Q(date_modified__range=(start_time, now)))
+
     context = {'won_deals': deals_within_a_day}
     return render(request, 'base/winners.html', context)
 
