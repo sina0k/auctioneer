@@ -25,6 +25,7 @@
           <div id="active-auction-{{ auction.id }}">
             <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
             <div>قیمت: {{ auction.current_price }}</div>
+            <div>آخرین پیشنهاد: {{ auction.last_bid.user.username }}</div>
             <hr />
           </div>
         {% endfor %}

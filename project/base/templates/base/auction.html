@@ -39,10 +39,12 @@
               </div>
         </div>
 
-        <div class="col-12 col-md-6 position-relative">
-            <img width="100%" height="100%" src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {{ "https://aqua-air.co.uk/wp-content/uploads/woocommerce-placeholder-600x600.png" }} {% endif %}" alt="">
-
-            <img hidden width="90%" height="90%" id="sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
+        <div class="col-12 col-md-6">
+            <div class="position-relative">
+              <img width="100%" height="100%" src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {{ "https://aqua-air.co.uk/wp-content/uploads/woocommerce-placeholder-600x600.png" }} {% endif %}" alt="">
+              
+              <img hidden width="90%" height="90%" id="sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
+            </div>
 
             <div class="w-100 text-center fs-1 mt-2">
                 محصول <strong>{{ auction.product.name }}</strong> از <strong>{{ auction.product.company.name }}</strong>
@@ -67,6 +69,17 @@
         </div>
     </div> {% endcomment %}
 
+</div>
+
+<hr />
+
+<div class="container pb-4">
+  <div class="fs-3">پیشنهاد‌های پیشین:</div>
+  <div dir="ltr">
+    {% for bid in auction.bids.all %}
+    <div>{{ bid.user.name }} @ {{ bid.created_at }}</div>
+    {% endfor %}
+  </div>
 </div>
 
 {% if auction.end_time %}
