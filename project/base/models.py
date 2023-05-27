@@ -63,7 +63,7 @@ class User(AbstractUser):
     bids_number = models.IntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(upload_to="uploads/users/", null=True, blank=True)
-    shopping_cart = models.ManyToManyField(Product, null=True, blank=True)
+    shopping_cart = models.ManyToManyField(Product, blank=True)
     # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(
@@ -98,7 +98,7 @@ class Deal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
     deal_type = models.CharField(max_length=50, choices=[(dt.value, dt.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)
-    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name='deal')
+    discount = models.OneToOneField(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name='deal')
 
     class Meta:
         ordering = ['-date_modified']
