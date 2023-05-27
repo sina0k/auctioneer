@@ -2,7 +2,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django
 
 .DS_Store
-uploads/
+# uploads/
 
 ### Django ###
 *.log
@@ -10,7 +10,7 @@ uploads/
 *.pyc
 __pycache__/
 local_settings.py
-/project/db.sqlite3
+# /project/db.sqlite3
 db.sqlite3-journal
 media
 
