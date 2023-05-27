@@ -79,8 +79,8 @@ class User(AbstractUser):
     bids_number = models.IntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(upload_to="uploads/users/", null=True, blank=True)
-    # shopping_cart = models.ManyToManyField(Product, blank=True)
-    # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
+
+    # User has fields: shopping_cart, bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(
         'auth.Group', related_name='custom_user_set', blank=True

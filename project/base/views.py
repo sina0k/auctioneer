@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 from .tasks import createNewTaskForAuction
-from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP
+from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP, ShoppingCart, BuyingProduct
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm, UserUpdateForm
@@ -101,7 +101,11 @@ def createBid(auctionId, user):
         auction = Auction.objects.get(id=auctionId)
     except ObjectDoesNotExist:
         return HttpResponse('Auction not found!', status=404)
-    # TODO validate if auction start time has arrived or auction is closed
+    if auction.start_time > timezone.now():
+        return HttpResponse('Auction has not started', status=400)
+    if auction.end_time <= timezone.now():
+        return HttpResponse('Auction has ended!', status=400)
+    # TODO DONE!
     if auction.last_bid and user.id == auction.last_bid.user.id:
         return HttpResponse("You already are the last bidder in this auction!", status=400)
 
@@ -119,17 +123,39 @@ def createBid(auctionId, user):
     createNewTaskForAuction(auction)
 
 
+def addToCart(product_id, user):
+    try:
+        product = Product.objects.get(id=product_id)
+    except Product.DoesNotExist:
+        return HttpResponse('Product not found!', status=404)
+
+    buying_product, created = BuyingProduct.objects.get_or_create(
+        product=product,
+        defaults={'quantity': 1}
+    )
+
+    if not created:
+        buying_product.quantity += 1
+        buying_product.save()
+    else:
+        user.shopping_cart.buying_products.add(buying_product)
+
+    return HttpResponse('Item added to cart successfully!')
+
+
 def auction(request, pk):
     auction = Auction.objects.get(id=pk)
     context = {'auction': auction}
 
     if request.method == "POST":
-        if auction.end_time is not None and auction.end_time <= timezone.now():
-            print("Auction has ended")
-            return render(request, 'base/auction.html', context)
         if not request.user.is_authenticated:
             return redirect('/login/')
-        createBid(pk, request.user)
+        action = request.POST.get('action')  # Get the action value from the form
+        if action == 'bid':
+            createBid(pk, request.user)
+        elif action == 'buy':
+            product_id = auction.product.id
+            addToCart(product_id, request.user)
 
     return render(request, 'base/auction.html', context)
 
