@@ -2,9 +2,10 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from enum import Enum
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 BID_STEP = 1000
+
 
 class DealType(Enum):
     AUCTION = 'Auction'
@@ -30,6 +31,20 @@ class Bid(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class ShoppingCart(models.Model):
+    products = models.ManyToManyField('Product')
+    updated_at = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='shopping_cart')
+
+
+class Discount(models.Model):
+    promo_code = models.CharField(max_length=50, blank=True, null=True)
+    discount_percentage = models.IntegerField(
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)])
+    description = models.TextField(null=True, blank=True)
 
 
 class User(AbstractUser):
@@ -82,12 +97,13 @@ class Transaction(models.Model):
 
 
 class Deal(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    products = models.ManyToManyField(Product)
     date_modified = models.DateTimeField(auto_now_add=True)
     address = models.TextField(null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
     deal_type = models.CharField(max_length=50, choices=[(dt.value, dt.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)
+    discount = models.ForeignKey(Discount, on_delete=models.SET_NULL, null=True, blank=True, related_name='deal')
 
     class Meta:
         ordering = ['-date_modified']
