@@ -1,3 +1,5 @@
+{% load static %}
+
 <div class="col-6 col-md-4">
   <a class="text-decoration-none text-dark" href="{% url 'auction' auction.id %}">
     <div class="card p-2 mb-4">
@@ -5,11 +7,11 @@
         <img
           width="100%"
           height="100%"
-          src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {{ "https://aqua-air.co.uk/wp-content/uploads/woocommerce-placeholder-600x600.png" }} {% endif %}"
+          src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
           class="card-img-top"
           alt=""
         />
-        <img hidden width="90%" height="90%" id="{{ auction.id }}-sold-image" class="sold-image" src="https://lizbazi.com/blog/wp-content/uploads/2017/04/sold-out-360x262.png" alt="">
+        <img hidden width="90%" height="90%" id="{{ auction.id }}-sold-image" class="sold-image" src="{% static 'images/sold-out.png' %}" alt="">
       </div>
       <div class="card-body">
         <h3 class="card-title">{{ auction.product.name }}</h3>
