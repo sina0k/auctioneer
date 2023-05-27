@@ -86,7 +86,6 @@ def home(request):
 
 @login_required(login_url='login')
 def checkout(request):
-    user = request.user
     return render(request, 'base/checkout.html', {})
 
 
@@ -96,7 +95,7 @@ def createBidHomePage(request, auctionId):
         createBid(auctionId, request.user)
 
         return redirect('/')
-    
+
 
 def createBid(auctionId, user):
     try:
@@ -142,7 +141,6 @@ def userProfile(request, pk):
 
 def about(request):
     return render(request, 'base/about.html', {})
-
 
 
 def learn(request):
