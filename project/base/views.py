@@ -85,6 +85,12 @@ def home(request):
 
 
 @login_required(login_url='login')
+def checkout(request):
+    user = request.user
+    return render(request, 'base/checkout.html', {})
+
+
+@login_required(login_url='login')
 def createBidHomePage(request, auctionId):
     if request.method == 'POST':
         createBid(auctionId, request.user)
@@ -136,6 +142,7 @@ def userProfile(request, pk):
 
 def about(request):
     return render(request, 'base/about.html', {})
+
 
 
 def learn(request):

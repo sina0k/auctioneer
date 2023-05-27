@@ -33,10 +33,18 @@ class Bid(models.Model):
         ordering = ['-created_at']
 
 
-class ShoppingCart(models.Model):
-    products = models.ManyToManyField('Product')
-    updated_at = models.DateTimeField(auto_now=True)
-    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='shopping_cart')
+class Company(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+
+
+class Product(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=10, decimal_places=0)
+    description = models.TextField(null=True, blank=True)
+    category = models.CharField(max_length=50, choices=[(ca.value, ca.name) for ca in Category])
+    image = models.ImageField(upload_to="uploads/products/", null=True, blank=True)
 
 
 class Discount(models.Model):
@@ -55,6 +63,7 @@ class User(AbstractUser):
     bids_number = models.IntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(upload_to="uploads/users/", null=True, blank=True)
+    shopping_cart = models.ManyToManyField(Product, null=True, blank=True)
     # User has fields: bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
     groups = models.ManyToManyField(
@@ -63,20 +72,6 @@ class User(AbstractUser):
     user_permissions = models.ManyToManyField(
         'auth.Permission', related_name='custom_user_set', blank=True
     )
-
-
-class Company(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-
-
-class Product(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    name = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=10, decimal_places=0)
-    description = models.TextField(null=True, blank=True)
-    category = models.CharField(max_length=50, choices=[(ca.value, ca.name) for ca in Category])
-    image = models.ImageField(upload_to="uploads/products/", null=True, blank=True)
 
 
 class Auction(models.Model):
