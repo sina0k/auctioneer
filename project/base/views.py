@@ -105,7 +105,7 @@ def createBid(auctionId, user):
         return HttpResponse('Auction has not started', status=400)
     if auction.end_time <= timezone.now():
         return HttpResponse('Auction has ended!', status=400)
-    # TODO DONE!
+    # TO DO DONE!
     if auction.last_bid and user.id == auction.last_bid.user.id:
         return HttpResponse("You already are the last bidder in this auction!", status=400)
 
