@@ -27,14 +27,20 @@
       <h2>مزایده‌های در حال انجام شما</h2>
       <div class="row">
         <hr />
-        {% for auction in active_auctions %}
-          <div id="active-auction-{{ auction.id }}">
-            <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
-            <div>قیمت: {{ auction.current_price }}</div>
-            <div>آخرین پیشنهاد: {{ auction.last_bid.user.username }}</div>
-            <hr />
+        {% if request.user.is_authenticated %}
+          {% for auction in active_auctions %}
+            <div id="active-auction-{{ auction.id }}">
+              <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+              <div>قیمت: {{ auction.current_price }}</div>
+              <div>آخرین پیشنهاد: {{ auction.last_bid.user.username }}</div>
+              <hr />
+            </div>
+          {% endfor %}
+        {% else %}
+          <div>
+            برای مشاهده‌ی این قسمت، <a href="{% url 'login' %}">وارد</a> شوید.
           </div>
-        {% endfor %}
+        {% endif %}
       </div>
     </div>
   </div>
