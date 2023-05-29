@@ -10,9 +10,9 @@
             <hr />
             <div class="fs-4">توضیحات شرکت تولیدکننده: <br /> {{ auction.product.company.description }}</div>
             <hr />
-            <div>آخرین پیشنهاد: {% if auction.last_bid %} <a href="{% url 'user-profile' auction.last_bid.user.id %}">{{ auction.last_bid.user.username }}</a> {% else %} هیچکس {% endif %}</div>
+            <div id="last_bidder">آخرین پیشنهاد: {% if auction.last_bid %} <a href="{% url 'user-profile' auction.last_bid.user.id %}">{{ auction.last_bid.user.username }}</a> {% else %} هیچکس {% endif %}</div>
             <hr />
-            <div>قیمت: {{ auction.current_price }} تومان</div>
+            <div id="price">قیمت: {{ auction.current_price }} تومان</div>
             <hr />
             <h4 id="timer" class="w-100 text-center">
                 {% if not auction.last_bid %}
@@ -27,10 +27,12 @@
             <div class="d-flex flex-column align-items-stretch gap-2">
                 <form method="post">
                   {% csrf_token %}
+                  <input type="hidden" value="bid" name="action">
                   <button 
                   {% if auction.end_time or auction.last_bid and auction.last_bid.user.id == request.user.id %}
                     disabled
                   {% endif %}
+                  id="bid-button"
                   class="btn btn-success w-100"
                   type="submit">
                     پیشنهاد
@@ -44,7 +46,7 @@
             <div class="position-relative">
               <img width="100%" height="100%" src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
               
-              <img hidden width="90%" height="90%" id="sold-image" class="sold-image" src="{% static 'images/login.png' %}" alt="">
+              <img hidden width="90%" height="90%" id="sold-image" class="sold-image" src="{% static 'images/sold-out.png' %}" alt="">
             </div>
 
             <div class="w-100 text-center fs-1 mt-2">
@@ -52,33 +54,15 @@
             </div>
         </div>
     </div>
-    {% comment %} <div>
-        <div class="auction-card">
-            <h1>{{ auction.product.name }} by {{ auction.product.company.name }}</h1>
-            <h2>Buying Price: <span class="price">{{ auction.current_price }}</span></h2>
-            <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
-            <p>Last Bidder: {% if auction.last_bid %}{{ auction.last_bid.user.username }}{% else %}None{% endif %}</p>
-            <p>Product Description: {{ auction.product.description }}</p>
-            <p>Company Description: {{ auction.product.company.description }}</p>
-            <p>Product Category: {{ auction.product.category }}</p>
-            <form method="post" action="{% url 'create-bid-home' auction.id %}">
-              {% csrf_token %}
-              <button type="submit">Bid Now!</button>
-            </form>
-
-            <!-- Add more details or customizations here -->
-        </div>
-    </div> {% endcomment %}
-
 </div>
 
 <hr />
 
 <div class="container pb-4">
   <div class="fs-3">پیشنهاد‌های پیشین:</div>
-  <div dir="ltr">
+  <div dir="ltr" id="bidders">
     {% for bid in auction.bids.all %}
-    <div>{{ bid.user.name }} @ {{ bid.created_at }}</div>
+    <div>{{ bid.user.name }} @ {{ bid.created_at|date:'Y-m-d H:i:s' }} UTC</div>
     {% endfor %}
   </div>
 </div>
@@ -98,12 +82,83 @@
       if (remainingTime < 0) {
         clearInterval(interval);
         document.getElementById("sold-image").hidden = false;
-        document.getElementById("timer").innerText = "فروخته شد!"
+        document.getElementById("timer").innerText = "فروخته شد!";
+        document.getElementById("bid-button").disabled = true;
         return;
       }
       var remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
       document.getElementById("timer").innerText = remainingTimeString;
     }, 1000);
+  </script>
+{% endif %}
+
+{% if not auction.end_time %}
+  <script>
+    const hostname = window.location.hostname;
+    const port = window.location.port;
+    const baseUrl = `${hostname}${port ? `:${port}` : ''}`;
+    const auctionId = {{ auction.id }}
+
+    const socket = new WebSocket(`ws://${baseUrl}/ws/auction/${auctionId}`);
+
+    socket.onopen = () => {
+      console.log('WebSocket connection opened.');
+    };
+    
+    // Event handler for WebSocket received message
+    socket.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log('Received message:', message);
+
+      document.getElementById("last_bidder").innerHTML = `آخرین پیشنهاد: <a href="/profile/${message.id}">${message.name}</a>`
+      document.getElementById("price").innerText = `قیمت: ${message.price} تومان`
+
+      
+      finishTime = new Date(message.created_at);
+
+      var year = finishTime.getUTCFullYear();
+      var month = ('0' + (finishTime.getUTCMonth() + 1)).slice(-2);
+      var day = ('0' + finishTime.getUTCDate()).slice(-2);
+      var hours = ('0' + finishTime.getUTCHours()).slice(-2);
+      var minutes = ('0' + finishTime.getUTCMinutes()).slice(-2);
+      var seconds = ('0' + finishTime.getUTCSeconds()).slice(-2);
+
+      var formattedDate = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+      const div = document.createElement('div')
+      div.innerText = `${message.name} @ ${formattedDate} UTC`
+      const bidders = document.getElementById("bidders")
+      bidders.insertBefore(
+        div, bidders.firstChild
+      )
+
+      finishTime.setSeconds(finishTime.getSeconds() + {{ auction.bid_duration }});
+      try {
+        console.log(interval)
+      } catch (e) {
+        interval = setInterval(() => {
+          var remainingTime = Math.floor((finishTime - Date.now()) / 1000);
+          if (remainingTime < 0) {
+            clearInterval(interval);
+            document.getElementById("sold-image").hidden = false;
+            document.getElementById("timer").innerText = "فروخته شد!";
+            document.getElementById("bid-button").disabled = true;
+            return;
+          }
+          var remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
+          document.getElementById("timer").innerText = remainingTimeString;
+        }, 1000);
+      }
+    };
+    
+    // Event handler for WebSocket connection close
+    socket.onclose = () => {
+      console.log('WebSocket connection closed.');
+    };
+    
+    // Event handler for WebSocket connection error
+    socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
   </script>
 {% endif %}
 

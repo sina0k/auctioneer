@@ -4,8 +4,7 @@
 
 body {
   background-color: powderblue;
-  min-height: 100vh;
-  height: fit-content;
+  height: 100vh;
 }
 
 nav {

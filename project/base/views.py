@@ -11,6 +11,8 @@ from .forms import UserForm, MyUserCreationForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 from django.utils import timezone
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 # Create your views here.
@@ -97,17 +99,17 @@ def createBidHomePage(request, auctionId):
 
 
 def createBid(auctionId, user):
+    # TODO throw exceptions instead of returning HttpResponse, & catch them in caller functions
     try:
         auction = Auction.objects.get(id=auctionId)
     except ObjectDoesNotExist:
         return HttpResponse('Auction not found!', status=404)
-    if auction.start_time > timezone.now():
-        return HttpResponse('Auction has not started', status=400)
-    if auction.end_time <= timezone.now():
-        return HttpResponse('Auction has ended!', status=400)
-    # TO DO DONE!
-    if auction.last_bid and user.id == auction.last_bid.user.id:
-        return HttpResponse("You already are the last bidder in this auction!", status=400)
+    # if auction.start_time > timezone.now():
+    #     return HttpResponse('Auction has not started', status=400)
+    # if auction.end_time:
+    #     return HttpResponse('Auction has ended!', status=400)
+    # if auction.last_bid and user.id == auction.last_bid.user.id:
+    #     return HttpResponse("You already are the last bidder in this auction!", status=400)
 
     bid = Bid.objects.create(
         auction=auction,
@@ -121,6 +123,7 @@ def createBid(auctionId, user):
     bid.save()
     auction.save()
     createNewTaskForAuction(auction)
+    return bid
 
 
 def addToCart(product_id, user):
@@ -144,19 +147,31 @@ def addToCart(product_id, user):
 
 
 def auction(request, pk):
-    auction = Auction.objects.get(id=pk)
-    context = {'auction': auction}
-
     if request.method == "POST":
         if not request.user.is_authenticated:
             return redirect('/login/')
-        action = request.POST.get('action')  # Get the action value from the form
+        action = request.POST.get('action')
         if action == 'bid':
-            createBid(pk, request.user)
+            bid = createBid(pk, request.user)
+            channel_layer = get_channel_layer()
+            async_to_sync(channel_layer.group_send)(
+                'auction_%s' % pk,
+                {
+                    'type': 'new_bid',
+                    'data': {
+                        'name': bid.user.username,
+                        'id': bid.user.id,
+                        'created_at': bid.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                        'price': float(bid.auction.current_price)
+                    }
+                }
+            )
         elif action == 'buy':
             product_id = auction.product.id
             addToCart(product_id, request.user)
 
+    auction = Auction.objects.get(id=pk)
+    context = {'auction': auction}
     return render(request, 'base/auction.html', context)
 
 
