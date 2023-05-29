@@ -30,10 +30,11 @@
             >پروفایل</a
           >
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'checkout' %}"> سبد خرید </a>
+        </li>
         {% endif %}
 
-                <li class="nav-item">
-          <a class="nav-link" href="{% url 'checkout' %}"> سبد خرید </a>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'winners' %}"> برندگان </a>
         </li>
@@ -50,7 +51,7 @@
         <a class="btn btn-outline-success" href="{% url 'login' %}">ورود</a>
         {% endif %}
       </ul>
-      <form class="d-flex" role="search" method="GET" action="{% url 'home' %}">
+      <form class="d-flex" role="search" method="get" action="{% url 'home' %}">
         <input
           class="form-control me-2"
           type="search"
