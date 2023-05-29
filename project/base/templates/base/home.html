@@ -1,8 +1,14 @@
-{% extends "main.html" %} {% block content %}
+{% extends "main.html" %}
+{% block content %}
 
 <script>
   const intervals = {};
   const finishTimes = {};
+  const sockets = {};
+
+  const hostname = window.location.hostname;
+  const port = window.location.port;
+  const baseUrl = `${hostname}${port ? `:${port}` : ''}`;
 </script>
 
 <div class="container bg-light m-4 mx-auto rounded">

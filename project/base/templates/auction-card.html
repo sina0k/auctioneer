@@ -16,10 +16,10 @@
       <div class="card-body">
         <h3 class="card-title">{{ auction.product.name }}</h3>
         <div class="card-text">
-          <div>
+          <div id="{{ auction.id }}-price">
             قیمت: {{ auction.current_price }}
           </div>
-          <div>    
+          <div id="{{ auction.id }}-last-bidder">    
             {% if auction.end_time %}
               برنده:
             {% else %}
@@ -46,10 +46,11 @@
         <div class="d-flex flex-column align-items-stretch gap-2">
           <form method="post" action="{% url 'create-bid-home' auction.id %}">
             {% csrf_token %}
-            <button 
+            <button
             {% if auction.end_time or auction.last_bid and auction.last_bid.user.id == request.user.id %}
               disabled
             {% endif %}
+            id="{{ auction.id }}-bid-button"
             class="btn btn-success w-100"
             type="submit">
               پیشنهاد
@@ -73,15 +74,64 @@
     finishTimes[{{ auction.id }}] = new Date("{{ auction.last_bid.created_at|date:'Y-m-d\TH:i:s\Z' }}");
     finishTimes[{{ auction.id }}].setSeconds(finishTimes[{{ auction.id }}].getSeconds() + {{ auction.bid_duration }});
     intervals[{{ auction.id }}] = setInterval(() => {
-      var remainingTime = Math.floor((finishTimes[{{ auction.id }}] - Date.now()) / 1000);
+      const remainingTime = Math.floor((finishTimes[{{ auction.id }}] - Date.now()) / 1000);
       if (remainingTime < 0) {
         clearInterval(intervals[{{ auction.id }}]);
         document.getElementById("{{ auction.id }}-sold-image").hidden = false;
         document.getElementById("{{ auction.id }}-time").innerText = "فروخته شد!"
+        document.getElementById("{{ auction.id }}-bid-button").disabled = true;
         return;
       }
-      var remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
+      const remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
       document.getElementById("{{ auction.id }}-time").innerText = remainingTimeString;
     }, 1000);
+  </script>
+{% endif %}
+
+{% if not auction.end_time %}
+  <script>
+    sockets[{{ auction.id }}] = new WebSocket(`ws://${baseUrl}/ws/auction/{{ auction.id }}`);
+
+    sockets[{{ auction.id }}].onopen = () => {
+      console.log('WebSocket connection opened.');
+    };
+    
+    // Event handler for WebSocket received message
+    sockets[{{ auction.id }}].onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      console.log('Received message:', message);
+
+      document.getElementById("{{ auction.id }}-last-bidder").innerHTML = `آخرین پیشنهاد: <a href="/profile/${message.id}">${message.name}</a>`
+      document.getElementById("{{ auction.id }}-price").innerText = `قیمت: ${message.price} تومان`
+
+      
+      finishTimes[{{ auction.id }}] = new Date(message.created_at);
+      finishTimes[{{ auction.id }}].setSeconds(finishTimes[{{ auction.id }}].getSeconds() + {{ auction.bid_duration }});
+
+      if (!intervals[{{ auction.id }}]) {
+        intervals[{{ auction.id }}] = setInterval(() => {
+          const remainingTime = Math.floor((finishTimes[{{ auction.id }}] - Date.now()) / 1000);
+          if (remainingTime < 0) {
+            clearInterval(intervals[{{ auction.id }}]);
+            document.getElementById("{{ auction.id }}-sold-image").hidden = false;
+            document.getElementById("{{ auction.id }}-time").innerText = "فروخته شد!";
+            document.getElementById("{{ auction.id }}-bid-button").disabled = true;
+            return;
+          }
+          const remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;
+          document.getElementById("{{ auction.id }}-time").innerText = remainingTimeString;
+        }, 1000);
+      }
+    };
+    
+    // Event handler for WebSocket connection close
+    sockets[{{ auction.id }}].onclose = () => {
+      console.log('WebSocket connection closed.');
+    };
+    
+    // Event handler for WebSocket connection error
+    sockets[{{ auction.id }}].onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
   </script>
 {% endif %}

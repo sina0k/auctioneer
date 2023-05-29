@@ -123,7 +123,20 @@ def createBid(auctionId, user):
     bid.save()
     auction.save()
     createNewTaskForAuction(auction)
-    return bid
+
+    channel_layer = get_channel_layer()
+    async_to_sync(channel_layer.group_send)(
+        'auction_%s' % auction.id,
+        {
+            'type': 'new_bid',
+            'data': {
+                'name': bid.user.username,
+                'id': bid.user.id,
+                'created_at': bid.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                'price': float(auction.current_price)
+            }
+        }
+    )
 
 
 def addToCart(product_id, user):
@@ -152,20 +165,7 @@ def auction(request, pk):
             return redirect('/login/')
         action = request.POST.get('action')
         if action == 'bid':
-            bid = createBid(pk, request.user)
-            channel_layer = get_channel_layer()
-            async_to_sync(channel_layer.group_send)(
-                'auction_%s' % pk,
-                {
-                    'type': 'new_bid',
-                    'data': {
-                        'name': bid.user.username,
-                        'id': bid.user.id,
-                        'created_at': bid.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
-                        'price': float(bid.auction.current_price)
-                    }
-                }
-            )
+            createBid(pk, request.user)
         elif action == 'buy':
             product_id = auction.product.id
             addToCart(product_id, request.user)
