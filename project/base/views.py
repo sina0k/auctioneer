@@ -141,6 +141,10 @@ def createBid(auctionId, user):
 
 def addToCart(product_id, user):
     try:
+        user.shopping_cart
+    except:
+        ShoppingCart.objects.create(user=user)
+    try:
         product = Product.objects.get(id=product_id)
     except Product.DoesNotExist:
         return HttpResponse('Product not found!', status=404)
@@ -167,8 +171,7 @@ def auction(request, pk):
         if action == 'bid':
             createBid(pk, request.user)
         elif action == 'buy':
-            product_id = auction.product.id
-            addToCart(product_id, request.user)
+            addToCart(request.POST.get('product'), request.user)
 
     auction = Auction.objects.get(id=pk)
     context = {'auction': auction}

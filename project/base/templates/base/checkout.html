@@ -1,18 +1,18 @@
-{% extends 'main.html' %}
+{% extends "main.html" %}
 
 {% block content %}
 
 <h2> Here are Items in your Shopping Cart!</h2>
 
-{% for p in user.shopping_cart.buying_products.all%}
+{% for p in user.shopping_cart.buying_products.all %}
 <div>
-    <small>{{p.product.name}} </small>
-    <p>Amount: {{p.quantity}}</p>
-    <p>Price: {{p.prdocut.price}}</p>
-    <p>Description: {{prdocut.description}}</p>
+    <small>{{ p.product.name }} </small>
+    <p>Amount: {{ p.quantity }}</p>
+    <p>Price: {{ p.prdocut.price }}</p>
+    <p>Description: {{ prdocut.description }}</p>
     <hr>
 </div>
-{% endfor%}
+{% endfor %}
 <!--   Calculate Total Price from every product + Add promo Code form to get a discount and calculate discount in the front   -->
 
 

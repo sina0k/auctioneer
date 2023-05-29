@@ -38,13 +38,18 @@
                     پیشنهاد
                   </button>
                 </form>
-                <a href="#" class="btn btn-info">اکنون بخرید</a>
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" value="buy" name="action">
+                  <input type="hidden" value="{{ auction.product.id }}" name="product">
+                  <button type="submit" class="btn btn-info w-100">اکنون بخرید</button>
+                </form>
               </div>
         </div>
 
         <div class="col-12 col-md-6">
             <div class="position-relative">
-              <img width="100%" height="100%" src="{% if auction.product.image %} {{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+              <img width="100%" height="100%" src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
               
               <img hidden width="90%" height="90%" id="sold-image" class="sold-image" src="{% static 'images/sold-out.png' %}" alt="">
             </div>
