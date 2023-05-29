@@ -1,19 +1,31 @@
 {% extends "main.html" %}
+{% load static %}
 
 {% block content %}
 
-<h2> Here are Items in your Shopping Cart!</h2>
+<div class="container">
+    <br />
+    <h2>سبد خرید شما:</h2>
+    <hr />
+    
+    {% for p in user.shopping_cart.products.all %}
+    <div class="row fs-4 text-center align-items-center p-2">
+        <div class="col-2">
+            <img width="100%" height="100%" src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+        </div>
+        <div class="col-2">{{ p.product.name }} </div>
+        <div class="col-3">توضیحات:<br />{{ p.product.description }}</div>
+        <div class="col-3">قیمت:<br />{{ p.product.price }} تومان</div>
+        <div class="col-2">تعداد:<br />{{ p.quantity }} عدد</div>
+    </div>
+    <hr />
+    {% endfor %}
 
-{% for p in user.shopping_cart.buying_products.all %}
-<div>
-    <small>{{ p.product.name }} </small>
-    <p>Amount: {{ p.quantity }}</p>
-    <p>Price: {{ p.prdocut.price }}</p>
-    <p>Description: {{ prdocut.description }}</p>
-    <hr>
+    <form method="post" class="row justify-content-end">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success w-25">پرداخت</button>
+    </form>
 </div>
-{% endfor %}
 <!--   Calculate Total Price from every product + Add promo Code form to get a discount and calculate discount in the front   -->
-
 
 {% endblock content %}

@@ -87,6 +87,8 @@ def home(request):
 
 @login_required(login_url='login')
 def checkout(request):
+    if request.method == "POST":
+        print('need to checkout')
     return render(request, 'base/checkout.html', {})
 
 
@@ -151,14 +153,13 @@ def addToCart(product_id, user):
 
     buying_product, created = BuyingProduct.objects.get_or_create(
         product=product,
+        cart=user.shopping_cart,
         defaults={'quantity': 1}
     )
 
     if not created:
         buying_product.quantity += 1
         buying_product.save()
-    else:
-        user.shopping_cart.buying_products.add(buying_product)
 
     return HttpResponse('Item added to cart successfully!')
 
