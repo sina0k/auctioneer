@@ -7,18 +7,19 @@
 
     {% for p in products %}
     <div class="row fs-4 text-center align-items-center p-2">
-        <div class="col-2">
-            <img width="100%" height="100%" src="{% if p.image %} /{{ p.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+        <div class="col-2" >
+           <a href=" {% url 'product' p.id %}"> <img width="100%" height="100%"
+                                                     src="{% if p.image %} /{{ p.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt=""></a>
         </div>
-        <div class="col-2">{{ p.name }} </div>
-        <div class="col-2">توضیحات:<br />{{ p.description }}</div>
-        <div class="col-2">قیمت:<br />{{ p.price }} تومان</div>
-        <div class="col-2">شرکت:<br />{{ p.company.name }} </div>
-        <div class="col-2">نوع محصول:<br />{{ p.category }} </div>
+        <div class="col-2"><a href=" {% url 'product' p.id %}">{{ p.name }}</a></div>
+        <div class="col-2">توضیحات:<br/>{{ p.description }}</div>
+        <div class="col-2">قیمت:<br/>{{ p.price }} تومان</div>
+        <div class="col-2">شرکت:<br/>{{ p.company.name }}</div>
+        <div class="col-2">نوع محصول:<br/>{{ p.category }}</div>
 
 
     </div>
-    <hr />
+    <hr/>
     {% endfor %}
 
 

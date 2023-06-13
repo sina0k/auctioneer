@@ -13,15 +13,15 @@ class DealType(Enum):
 
 
 class Category(Enum):
-    ELEC = 'Electronics and Computers'
     ELECT = 'الکترونیک و تکنولوژی'
-    CAR = 'Cars'
-    BID = 'Bid Packs'
-    HOME = "Home, Garden and Tools"
-    FASHION = 'Fashion, Health and Beauty'
-    CARD = 'Gift Cards'
-    KITCHEN = 'Kitchen and Dining'
-    OTHER = 'Other'
+    CAR = 'ماشین'
+    BID = 'خرید پیشنهادها'
+    HOME = "وسایل خانه و باغبانی"
+    COSMETIC = 'آرایشی بهداشتی'
+    FASHION = "پوشاک و فشن"
+    CARD = 'کارت هدیه'
+    KITCHEN = 'آشپزخانه و غذاخوری'
+    OTHER = 'باقی'
 
 
 class Bid(models.Model):
