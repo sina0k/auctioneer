@@ -164,6 +164,16 @@ def addToCart(product_id, user):
     return HttpResponse('Item added to cart successfully!')
 
 
+def product(request, pk):
+    if request.method=="POST":
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        addToCart(pk, request.user)
+
+    product = Product.objects.get(id=pk)
+    context = {'product': product}
+    return render(request, 'base/product.html', context)
+
 def auction(request, pk):
     if request.method == "POST":
         if not request.user.is_authenticated:

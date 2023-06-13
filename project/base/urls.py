@@ -18,6 +18,7 @@ urlpatterns = [
     path('update-user', views.updateUser, name="update-user"),
 
     path('auction/<str:pk>/', views.auction, name="auction"),
+    path('product/<str:pk>/', views.product, name="product"),
     path('about', views.about, name="about"),
     path('learn', views.learn, name="learn"),
     path('winners', views.winners, name="winners"),

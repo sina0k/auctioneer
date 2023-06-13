@@ -55,7 +55,7 @@
             </div>
 
             <div class="w-100 text-center fs-1 mt-2">
-                محصول <strong>{{ auction.product.name }}</strong> از <strong>{{ auction.product.company.name }}</strong>
+                محصول <strong><a href=" {% url 'product' auction.product.id %}">{{ auction.product.name }}</a></strong> از <strong>{{ auction.product.company.name }}</strong>
             </div>
         </div>
     </div>
