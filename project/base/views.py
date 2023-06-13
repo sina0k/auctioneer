@@ -70,6 +70,7 @@ def logoutUser(request):
 
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
+    now = timezone.now()
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -80,8 +81,9 @@ def home(request):
         Q(product__name__icontains=q) |
         Q(product__company__name__icontains=q) |
         Q(product__description__icontains=q)
+    ).exclude(
+        end_time__lt=now-timedelta(hours=2)
     )
-
     if request.user.is_authenticated:
         active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
     else:
