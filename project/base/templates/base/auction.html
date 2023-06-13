@@ -40,7 +40,7 @@
                     پیشنهاد
                   </button>
                 </form>
-                <form method="post">company
+                <form method="post">
                   {% csrf_token %}
                   <input type="hidden" value="buy" name="action">
                   <input type="hidden" value="{{ auction.product.id }}" name="product">

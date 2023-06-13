@@ -56,7 +56,11 @@
               پیشنهاد
             </button>
           </form>
-          <a href="#" class="btn btn-info">اکنون بخرید</a>
+          <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" value="{{ auction.product.id }}" name="product">
+                  <button type="submit" class="btn btn-info w-100">اکنون بخرید</button>
+          </form>
         </div>
       </div>
     </div>

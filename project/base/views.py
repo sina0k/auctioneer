@@ -71,6 +71,11 @@ def logoutUser(request):
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        addToCart(request.POST.get('product'), request.user)
+
     auctions = Auction.objects.filter(
         Q(product__name__icontains=q) |
         Q(product__company__name__icontains=q) |
