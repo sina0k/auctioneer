@@ -66,10 +66,7 @@ class BuyingProduct(models.Model):
 
 
 class ShoppingCart(models.Model):
-    user = models.OneToOneField('User', on_delete=models.CASCADE, related_name='shopping_cart')
-
-    def __str__(self):
-        return f"Shopping Cart for {self.user.username}"
+    user = models.OneToOneField('User', null=True, blank=True, on_delete=models.CASCADE, related_name='shopping_cart')
 
 
 class User(AbstractUser):
@@ -109,9 +106,8 @@ class Transaction(models.Model):
 
 
 class Deal(models.Model):
-    products = models.ManyToManyField(Product)
+    cart = models.OneToOneField('ShoppingCart', on_delete=models.CASCADE, related_name='deal')
     date_modified = models.DateTimeField(auto_now_add=True)
-    address = models.TextField(null=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='deals')
     deal_type = models.CharField(max_length=50, choices=[(dt.value, dt.name) for dt in DealType])
     transaction = models.ForeignKey(Transaction, on_delete=models.SET_NULL, null=True)

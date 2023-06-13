@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 from .tasks import createNewTaskForAuction
-from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP, ShoppingCart, BuyingProduct
+from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP, ShoppingCart, BuyingProduct, DealType
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm, UserUpdateForm
@@ -79,9 +79,27 @@ def verify(request):
         response = response.json()
         if response['Status'] == 100:
             paymentRefID = response["RefID"]
-            # TODO create deal with this ref id and products in the shopping_cart then empty the shopping cart.
 
-            # return JsonResponse({'status': True, 'RefID': response['RefID']})
+            transaction = Transaction.objects.create(
+                payment_number=paymentRefID,
+                price=amount
+            )
+
+            cart = request.user.shopping_cart
+
+            cart.user = None
+            cart.save()
+
+            request.user.shopping_cart = None
+            ShoppingCart.objects.create(user=request.user)
+
+            Deal.objects.create(
+                cart=cart,
+                user=request.user,
+                deal_type=DealType.BUY.value,
+                transaction=transaction,
+            )
+            
             return render(request, 'base/done-payment.html', { "success": True, "refID": paymentRefID })
         else:
             return render(request, 'base/done-payment.html', { "success": False })
