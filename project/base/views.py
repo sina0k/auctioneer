@@ -23,7 +23,8 @@ ZP_API_REQUEST = f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.j
 ZP_API_VERIFY = f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
 ZP_API_STARTPAY = f"https://sandbox.zarinpal.com/pg/StartPay/"
 
-CallbackURL = 'http://127.0.0.1:8000/verify-payment/'
+verifyCallbackURL = 'http://127.0.0.1:8000/verify-payment/'
+verifyAuctionCallbackURL = 'http://127.0.0.1:8000/verify-auction-payment/'
 
 
 @login_required(login_url='login')
@@ -38,7 +39,7 @@ def send_request(request):
         "MerchantID": settings.MERCHANT,
         "Amount": float(amount),
         "Description": description,
-        "CallbackURL": CallbackURL,
+        "CallbackURL": verifyCallbackURL,
     }
     data = json.dumps(data)
     # set content length by data
@@ -92,6 +93,92 @@ def verify(request):
 
             request.user.shopping_cart = None
             ShoppingCart.objects.create(user=request.user)
+
+            Deal.objects.create(
+                cart=cart,
+                user=request.user,
+                deal_type=DealType.BUY.value,
+                transaction=transaction,
+            )
+            
+            return render(request, 'base/done-payment.html', { "success": True, "refID": paymentRefID })
+        else:
+            return render(request, 'base/done-payment.html', { "success": False })
+    return HttpResponse(response)
+
+@login_required(login_url='login')
+def auctionPayment(request, pk):
+    auction = Auction.objects.get(id=pk)
+
+    if auction.has_paid:
+        return HttpResponse("this is already payed!")
+
+    if auction.last_bid.user.id != request.user.id:
+        return HttpResponse("You can't pay for this!")
+    
+    amount = auction.current_price - BID_STEP
+    description = f"{auction.product.name} x {1} - won in auction!"
+    
+    data = {
+        "MerchantID": settings.MERCHANT,
+        "Amount": float(amount),
+        "Description": description,
+        "CallbackURL": verifyAuctionCallbackURL + f"{pk}/",
+    }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    try:
+        response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                return redirect(ZP_API_STARTPAY + str(response['Authority']))
+            else:
+                return JsonResponse({'status': False, 'code': str(response['Status'])})
+        return HttpResponse(response)
+    
+    except requests.exceptions.Timeout:
+        return JsonResponse({'status': False, 'code': 'timeout'})
+    except requests.exceptions.ConnectionError:
+        return JsonResponse({'status': False, 'code': 'connection error'})
+    
+@login_required(login_url='login')
+def verifyAuctionPayment(request, pk):
+    auction = Auction.objects.get(id=pk)
+    authority = request.GET.get('Authority', '')
+    amount = auction.current_price - BID_STEP
+    data = {
+        "MerchantID": settings.MERCHANT,
+        "Amount": float(amount),
+        "Authority": authority,
+    }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    response = requests.post(ZP_API_VERIFY, data=data, headers=headers)
+
+    if response.status_code == 200:
+        response = response.json()
+        if response['Status'] == 100:
+            paymentRefID = response["RefID"]
+
+            auction.has_paid = True
+            auction.save()
+
+            transaction = Transaction.objects.create(
+                payment_number=paymentRefID,
+                price=amount
+            )
+
+            cart = ShoppingCart.objects.create()
+
+            BuyingProduct.objects.create(
+                product=auction.product,
+                quantity=1,
+                cart=cart
+            )
 
             Deal.objects.create(
                 cart=cart,

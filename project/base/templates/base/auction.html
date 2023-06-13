@@ -46,6 +46,13 @@
                   <input type="hidden" value="{{ auction.product.id }}" name="product">
                   <button type="submit" class="btn btn-info w-100">اکنون بخرید</button>
                 </form>
+
+                {% if auction.last_bid.user.id == request.user.id and auction.end_time is not None and not auction.has_paid %}
+                <form method="get" action={% url 'pay-auction' auction.id %}>
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-warning w-100">تکمیل معامله</button>
+                </form>
+                {% endif %}
               </div>
         </div>
 
@@ -69,7 +76,7 @@
   <div class="fs-3">پیشنهاد‌های پیشین:</div>
   <div dir="ltr" id="bidders">
     {% for bid in auction.bids.all %}
-    <div>{{ bid.user.name }} @ {{ bid.created_at|date:'Y-m-d H:i:s' }} UTC</div>
+    <div>{{ bid.user.username }} @ {{ bid.created_at|date:'Y-m-d H:i:s' }} UTC</div>
     {% endfor %}
   </div>
 </div>

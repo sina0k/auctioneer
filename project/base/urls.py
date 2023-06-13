@@ -28,7 +28,9 @@ urlpatterns = [
     path('create-bid/<str:auctionId>', views.createBidHomePage, name="create-bid-home"),
 
     path('buy-request/', views.send_request, name='request'),
+    path('auction-buy-request/<str:pk>', views.auctionPayment, name='pay-auction'),
     path('verify-payment/', views.verify , name='verify'),
+    path('verify-auction-payment/<str:pk>/', views.verifyAuctionPayment , name='verify-auction'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
