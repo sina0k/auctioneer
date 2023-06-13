@@ -141,3 +141,5 @@ CHANNEL_LAYERS = {
         'BACKEND': 'channels.layers.InMemoryChannelLayer',
     },
 }
+
+MERCHANT = "123456789012345687901234567890123456"

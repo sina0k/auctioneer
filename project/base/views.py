@@ -1,5 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.db.models import Q
 
@@ -14,6 +14,78 @@ from django.utils import timezone
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
+from django.conf import settings
+import requests
+import json
+
+
+ZP_API_REQUEST = f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
+ZP_API_VERIFY = f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
+ZP_API_STARTPAY = f"https://sandbox.zarinpal.com/pg/StartPay/"
+
+CallbackURL = 'http://127.0.0.1:8000/verify-payment/'
+
+
+@login_required(login_url='login')
+def send_request(request):
+    amount = 0
+    description = ""
+    for p in request.user.shopping_cart.products.all():
+        amount += p.product.price * p.quantity
+        description += f"{p.product.name} x {p.quantity} - \n"
+    
+    data = {
+        "MerchantID": settings.MERCHANT,
+        "Amount": float(amount),
+        "Description": description,
+        "CallbackURL": CallbackURL,
+    }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    try:
+        response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                return redirect(ZP_API_STARTPAY + str(response['Authority']))
+            else:
+                return JsonResponse({'status': False, 'code': str(response['Status'])})
+        return HttpResponse(response)
+    
+    except requests.exceptions.Timeout:
+        return JsonResponse({'status': False, 'code': 'timeout'})
+    except requests.exceptions.ConnectionError:
+        return JsonResponse({'status': False, 'code': 'connection error'})
+
+@login_required(login_url='login')
+def verify(request):
+    authority = request.GET.get('Authority', '')
+    amount = 0
+    for p in request.user.shopping_cart.products.all():
+        amount += p.product.price * p.quantity
+    data = {
+        "MerchantID": settings.MERCHANT,
+        "Amount": float(amount),
+        "Authority": authority,
+    }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    response = requests.post(ZP_API_VERIFY, data=data, headers=headers)
+
+    if response.status_code == 200:
+        response = response.json()
+        if response['Status'] == 100:
+            paymentRefID = response["RefID"]
+            # TODO create deal with this ref id and products in the shopping_cart then empty the shopping cart.
+
+            # return JsonResponse({'status': True, 'RefID': response['RefID']})
+            return render(request, 'base/done-payment.html', { "success": True, "refID": paymentRefID })
+        else:
+            return render(request, 'base/done-payment.html', { "success": False })
+    return HttpResponse(response)
 
 # Create your views here.
 

@@ -21,7 +21,7 @@
     <hr />
     {% endfor %}
 
-    <form method="post" class="row justify-content-end">
+    <form method="post" action="{% url 'request' %}" class="row justify-content-end">
         {% csrf_token %}
         <button type="submit" class="btn btn-success w-25">پرداخت</button>
     </form>

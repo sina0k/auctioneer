@@ -1,0 +1,31 @@
+{% extends "main.html" %}
+
+{% block content %}
+
+<div class="container">
+    <br />
+    <div class="fs-1 text-center">
+        {% if success %}
+        <div class="text-success">
+            <div class="row">
+                <div class="col-12">
+                    پرداخت موفقیت‌آمیز بود!
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    شناسه‌ی پرداخت: {{ refID }}
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row text-danger">
+            <div class="col-12">
+                پرداخت ناموفق!
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock content %}

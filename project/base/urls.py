@@ -23,8 +23,10 @@ urlpatterns = [
     path('winners', views.winners, name="winners"),
     path('checkout/cart/', views.checkout, name="checkout"),
 
-    path('create-bid/<str:auctionId>', views.createBidHomePage, name="create-bid-home")
+    path('create-bid/<str:auctionId>', views.createBidHomePage, name="create-bid-home"),
 
+    path('buy-request/', views.send_request, name='request'),
+    path('verify-payment/', views.verify , name='verify'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
