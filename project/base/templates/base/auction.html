@@ -8,6 +8,8 @@
         <div class="col-12 col-md-6 text-center p-4 fs-2">
             <div class="fs-4">توضیحات محصول: <br /> {{ auction.product.description }}</div>
             <hr />
+            <div class="fs-4">نام شرکت: <br /><a href=" {% url 'company' auction.product.company.id %}"> {{ auction.product.company.name }}</a></div>
+            <hr />
             <div class="fs-4">توضیحات شرکت تولیدکننده: <br /> {{ auction.product.company.description }}</div>
             <hr />
             <div id="last-bidder">آخرین پیشنهاد: {% if auction.last_bid %} <a href="{% url 'user-profile' auction.last_bid.user.id %}">{{ auction.last_bid.user.username }}</a> {% else %} هیچکس {% endif %}</div>
@@ -38,7 +40,7 @@
                     پیشنهاد
                   </button>
                 </form>
-                <form method="post">
+                <form method="post">company
                   {% csrf_token %}
                   <input type="hidden" value="buy" name="action">
                   <input type="hidden" value="{{ auction.product.id }}" name="product">

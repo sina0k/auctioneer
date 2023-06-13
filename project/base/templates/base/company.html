@@ -3,6 +3,22 @@
 
 {% block content %}
 
+<div class="container p-4">
+    <div class="row">
+        <div class="col-12 col-md-6 text-center p-4 fs-2">
+            <div class="fs-4">نام شرکت: <br /> {{ company.name }}</div>
+            <hr />
+            <div class="fs-4">توضیحات شرکت: <br /> {{ company.description }}</div>
+            <hr />
+
+        </div>
+    </div>
+
+
+</div>
+
+<hr />
+
 <div class="container">
 
     {% for p in products %}
@@ -10,10 +26,9 @@
         <div class="col-2">
             <img width="100%" height="100%" src="{% if p.image %} /{{ p.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
         </div>
-        <div class="col-2">{{ p.name }} </div>
-        <div class="col-2">توضیحات:<br />{{ p.description }}</div>
+        <div class="col-3">{{ p.name }} </div>
+        <div class="col-3">توضیحات:<br />{{ p.description }}</div>
         <div class="col-2">قیمت:<br />{{ p.price }} تومان</div>
-        <div class="col-2">شرکت:<br />{{ p.company.name }} </div>
         <div class="col-2">نوع محصول:<br />{{ p.category }} </div>
 
 
@@ -23,6 +38,9 @@
 
 
 </div>
-<!--   Calculate Total Price from every product + Add promo Code form to get a discount and calculate discount in the front   -->
+
+
+
+
 
 {% endblock content %}

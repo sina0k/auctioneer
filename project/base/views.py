@@ -180,6 +180,17 @@ def product(request, pk):
     return render(request, 'base/product.html', context)
 
 
+def company(request, pk):
+    cmp = Company.objects.get(id=pk)
+
+    products = Product.objects.filter(
+        Q(company__id=pk)
+    )
+
+    context = {'company': cmp, 'products': products}
+    return render(request, 'base/company.html', context)
+
+
 def auction(request, pk):
     if request.method == "POST":
         if not request.user.is_authenticated:
