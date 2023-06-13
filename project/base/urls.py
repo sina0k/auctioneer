@@ -16,8 +16,10 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('profile/<str:pk>', views.userProfile, name="user-profile"),
     path('update-user', views.updateUser, name="update-user"),
-
+    path('product_list', views.product_list, name="product_list"),
+    path('company/<str:pk>/', views.company, name="company"),
     path('auction/<str:pk>/', views.auction, name="auction"),
+    path('product/<str:pk>/', views.product, name="product"),
     path('about', views.about, name="about"),
     path('learn', views.learn, name="learn"),
     path('winners', views.winners, name="winners"),

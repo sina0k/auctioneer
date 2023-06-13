@@ -143,6 +143,11 @@ def logoutUser(request):
 def home(request):
     q = request.GET.get('q') if request.GET.get('q') != None else ''
 
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        addToCart(request.POST.get('product'), request.user)
+
     auctions = Auction.objects.filter(
         Q(product__name__icontains=q) |
         Q(product__company__name__icontains=q) |
@@ -162,6 +167,11 @@ def checkout(request):
     if request.method == "POST":
         print('need to checkout')
     return render(request, 'base/checkout.html', {})
+
+
+def product_list(request):
+    context = {'products': Product.objects.all()}
+    return render(request, 'base/product_list.html', context)
 
 
 @login_required(login_url='login')
@@ -234,6 +244,28 @@ def addToCart(product_id, user):
         buying_product.save()
 
     return HttpResponse('Item added to cart successfully!')
+
+
+def product(request, pk):
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect('/login/')
+        addToCart(pk, request.user)
+
+    product = Product.objects.get(id=pk)
+    context = {'product': product}
+    return render(request, 'base/product.html', context)
+
+
+def company(request, pk):
+    cmp = Company.objects.get(id=pk)
+
+    products = Product.objects.filter(
+        Q(company__id=pk)
+    )
+
+    context = {'company': cmp, 'products': products}
+    return render(request, 'base/company.html', context)
 
 
 def auction(request, pk):
