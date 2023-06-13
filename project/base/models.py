@@ -14,6 +14,7 @@ class DealType(Enum):
 
 class Category(Enum):
     ELEC = 'Electronics and Computers'
+    ELECT = 'الکترونیک و تکنولوژی'
     CAR = 'Cars'
     BID = 'Bid Packs'
     HOME = "Home, Garden and Tools"

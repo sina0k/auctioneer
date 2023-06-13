@@ -92,6 +92,11 @@ def checkout(request):
     return render(request, 'base/checkout.html', {})
 
 
+def product_list(request):
+    context = {'products': Product.objects.all()}
+    return render(request, 'base/product_list.html', context)
+
+
 @login_required(login_url='login')
 def createBidHomePage(request, auctionId):
     if request.method == 'POST':
@@ -165,7 +170,7 @@ def addToCart(product_id, user):
 
 
 def product(request, pk):
-    if request.method=="POST":
+    if request.method == "POST":
         if not request.user.is_authenticated:
             return redirect('/login/')
         addToCart(pk, request.user)
@@ -173,6 +178,7 @@ def product(request, pk):
     product = Product.objects.get(id=pk)
     context = {'product': product}
     return render(request, 'base/product.html', context)
+
 
 def auction(request, pk):
     if request.method == "POST":
