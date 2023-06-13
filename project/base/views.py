@@ -183,7 +183,7 @@ def verifyAuctionPayment(request, pk):
             Deal.objects.create(
                 cart=cart,
                 user=request.user,
-                deal_type=DealType.BUY.value,
+                deal_type=DealType.AUCTION.value,
                 transaction=transaction,
             )
             
