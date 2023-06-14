@@ -15,12 +15,13 @@ class DealType(Enum):
 class Category(Enum):
     ELECT = 'الکترونیک و تکنولوژی'
     CAR = 'ماشین'
-    BID = 'خرید پیشنهادها'
+    BID = 'توکن پیشنهادها'
     HOME = "وسایل خانه و باغبانی"
     COSMETIC = 'آرایشی بهداشتی'
     FASHION = "پوشاک و فشن"
     CARD = 'کارت هدیه'
     KITCHEN = 'آشپزخانه و غذاخوری'
+    FOOD = 'خوراکی و سوپرمارکت'
     OTHER = 'باقی'
 
 

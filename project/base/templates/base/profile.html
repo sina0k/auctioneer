@@ -30,7 +30,7 @@
                     {% for bid in bids %}
                         <div>
                             <p>{{ bid.auction.product.name }}</p>
-                            <p>با قیمت: {{ bid.auction.current_price }}</p>
+                            <p>با قیمت: {{ bid.price }}</p>
                             <p>در تاریخ: {{ bid.created_at }}</p>
                             <hr />
                         </div>
@@ -50,10 +50,10 @@
             <div class="accordion-body">
                 {% for deal in deals %}
                     <div>
-                        <small>@{{ deal.product.name }}، {{ deal.date_modified }} پیش</small>
+                        <small>{{ deal.date_modified }}</small>
                         <p>نوع معامله: {{ deal.deal_type }}</p>
                         <p>با قیمت: {{ deal.transaction.price }}</p>
-                        <p>قیمت واقعی محصول: {{ deal.product.price }}</p>
+<!--                        <p>قیمت واقعی محصول: {{ deal.product.price }}</p>-->
                         <hr>
                     </div>
                 {% empty %}
