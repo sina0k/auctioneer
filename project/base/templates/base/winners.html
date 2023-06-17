@@ -1,16 +1,47 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
 
-     <h2>Wins within the last 24 hours</h2>
-      {% for deal in won_deals%}
-      <div>
-        <small><a href="{% url 'user-profile' deal.user.id %}">@{{deal.user}} </a>{{deal.date_modified|timesince}}</small>
-        <p>has won: {{deal.product.name}}</p>
-        <p>at price: {{deal.transaction.price}}</p>
-        <hr>
-      </div>
-      {% endfor%}
 
+
+<h2>Wins within the last 24 hours</h2>
+
+<div class="container">
+    {% for deal in won_deals%}
+    {% with p=deal.cart.products.all|first %}
+    {% if p %}
+
+
+    <div class="row fs-4 text-center align-items-center p-2">
+         <div class="col-2" >
+
+             <a href=" {% url 'product' p.product.id %}">
+               <img width="100%" height="100%" src="{% if p.product.image %}/{{ p.product.image }}{% else %}{% static 'images/product.png' %}{% endif %}" alt="">
+           </a>
+
+        </div>
+        <div class="col-2"><a href=" {% url 'product' p.product.id %}">{{ p.product.name }}</a></div>
+        <div class="col-2">قیمت:<br/>{{ p.product.price }} تومان</div>
+        <div class="col-2">شرکت:<br/>{{ p.product.company.name }}</div>
+        <div class="col-2">برنده مزایده:<br/><a href="{% url 'user-profile' deal.user.id %}">{{ deal.user.username }}</a></div>
+        <div class="col-2">
+            <a href=" {% url 'user-profile' deal.user.id %}">
+               <img width="70%" height="70%" src="{% if user.avatar %}/{{ user.avatar }}{% else %} {% static "images/profile.png" %} {% endif %}" alt="">
+           </a>
+
+
+
+    </div>
+
+
+    <hr/>
+
+    {% endif %}
+    {% endwith %}
+    {% endfor %}
+
+
+</div>
 
 {% endblock content %}
