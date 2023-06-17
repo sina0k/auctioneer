@@ -4,7 +4,8 @@ from django.shortcuts import render, redirect
 from django.db.models import Q
 
 from .tasks import createNewTaskForAuction
-from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP, ShoppingCart, BuyingProduct, DealType
+from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP, ShoppingCart, BuyingProduct, \
+    DealType
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import UserForm, MyUserCreationForm, UserUpdateForm
@@ -17,7 +18,6 @@ from asgiref.sync import async_to_sync
 from django.conf import settings
 import requests
 import json
-
 
 ZP_API_REQUEST = f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentRequest.json"
 ZP_API_VERIFY = f"https://sandbox.zarinpal.com/pg/rest/WebGate/PaymentVerification.json"
@@ -34,7 +34,7 @@ def send_request(request):
     for p in request.user.shopping_cart.products.all():
         amount += p.product.price * p.quantity
         description += f"{p.product.name} x {p.quantity} - \n"
-    
+
     data = {
         "MerchantID": settings.MERCHANT,
         "Amount": float(amount),
@@ -43,7 +43,7 @@ def send_request(request):
     }
     data = json.dumps(data)
     # set content length by data
-    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
     try:
         response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
 
@@ -54,11 +54,12 @@ def send_request(request):
             else:
                 return JsonResponse({'status': False, 'code': str(response['Status'])})
         return HttpResponse(response)
-    
+
     except requests.exceptions.Timeout:
         return JsonResponse({'status': False, 'code': 'timeout'})
     except requests.exceptions.ConnectionError:
         return JsonResponse({'status': False, 'code': 'connection error'})
+
 
 @login_required(login_url='login')
 def verify(request):
@@ -73,7 +74,7 @@ def verify(request):
     }
     data = json.dumps(data)
     # set content length by data
-    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
     response = requests.post(ZP_API_VERIFY, data=data, headers=headers)
 
     if response.status_code == 200:
@@ -100,11 +101,12 @@ def verify(request):
                 deal_type=DealType.BUY.value,
                 transaction=transaction,
             )
-            
-            return render(request, 'base/done-payment.html', { "success": True, "refID": paymentRefID })
+
+            return render(request, 'base/done-payment.html', {"success": True, "refID": paymentRefID})
         else:
-            return render(request, 'base/done-payment.html', { "success": False })
+            return render(request, 'base/done-payment.html', {"success": False})
     return HttpResponse(response)
+
 
 @login_required(login_url='login')
 def auctionPayment(request, pk):
@@ -115,10 +117,10 @@ def auctionPayment(request, pk):
 
     if auction.last_bid.user.id != request.user.id:
         return HttpResponse("You can't pay for this!")
-    
+
     amount = auction.current_price - BID_STEP
     description = f"{auction.product.name} x {1} - won in auction!"
-    
+
     data = {
         "MerchantID": settings.MERCHANT,
         "Amount": float(amount),
@@ -127,7 +129,7 @@ def auctionPayment(request, pk):
     }
     data = json.dumps(data)
     # set content length by data
-    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
     try:
         response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
 
@@ -138,12 +140,13 @@ def auctionPayment(request, pk):
             else:
                 return JsonResponse({'status': False, 'code': str(response['Status'])})
         return HttpResponse(response)
-    
+
     except requests.exceptions.Timeout:
         return JsonResponse({'status': False, 'code': 'timeout'})
     except requests.exceptions.ConnectionError:
         return JsonResponse({'status': False, 'code': 'connection error'})
-    
+
+
 @login_required(login_url='login')
 def verifyAuctionPayment(request, pk):
     auction = Auction.objects.get(id=pk)
@@ -156,7 +159,7 @@ def verifyAuctionPayment(request, pk):
     }
     data = json.dumps(data)
     # set content length by data
-    headers = {'content-type': 'application/json', 'content-length': str(len(data)) }
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
     response = requests.post(ZP_API_VERIFY, data=data, headers=headers)
 
     if response.status_code == 200:
@@ -186,11 +189,12 @@ def verifyAuctionPayment(request, pk):
                 deal_type=DealType.AUCTION.value,
                 transaction=transaction,
             )
-            
-            return render(request, 'base/done-payment.html', { "success": True, "refID": paymentRefID })
+
+            return render(request, 'base/done-payment.html', {"success": True, "refID": paymentRefID})
         else:
-            return render(request, 'base/done-payment.html', { "success": False })
+            return render(request, 'base/done-payment.html', {"success": False})
     return HttpResponse(response)
+
 
 # Create your views here.
 
@@ -259,7 +263,7 @@ def home(request):
         Q(product__company__name__icontains=q) |
         Q(product__description__icontains=q)
     ).exclude(
-        end_time__lt=now-timedelta(hours=2)
+        end_time__lt=now - timedelta(hours=2)
     )
     if request.user.is_authenticated:
         active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
@@ -360,7 +364,13 @@ def product(request, pk):
         addToCart(pk, request.user)
 
     product = Product.objects.get(id=pk)
-    context = {'product': product}
+
+    auctions = Auction.objects.filter(Q(product__id=pk)&
+                                      Q(end_time=None))
+
+
+    context = {'product': product, 'auctions': auctions}
+
     return render(request, 'base/product.html', context)
 
 

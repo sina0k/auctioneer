@@ -96,7 +96,7 @@ class Auction(models.Model):
     current_price = models.DecimalField(max_digits=10, decimal_places=0)
     bid_duration = models.IntegerField()
     last_bid = models.ForeignKey(Bid, on_delete=models.SET_NULL, null=True, blank=True, related_name="auction_last_bid")
-    has_paid = models.BooleanField(default=False)
+    has_paid = models.  BooleanField(default=False)
 
     class Meta:
         ordering = ['-start_time']

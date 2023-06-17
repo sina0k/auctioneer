@@ -32,7 +32,7 @@
             </div>
 
             <div class="w-100 text-center fs-1 mt-2">
-                محصول <strong>{{ product.name }}</strong> از <strong>{{ product.company.name }}</strong>
+                محصول <strong>{{ product.name }}</strong> از <strong><a href=" {% url 'company' product.company.id %}">{{ product.company.name }}</a></strong>
             </div>
         </div>
     </div>
@@ -40,7 +40,29 @@
 
 <hr />
 
+<!--<div>-->
+<!--      <h2>{{ auctions.count }} تعداد مزایده از این محصول موجود است:</h2>-->
+<!--      <div class="row">-->
+<!--        {% for auction in auctions %}-->
+<!--          {% include "auction-card.html" with auction=auction %}-->
+<!--        {% endfor %}-->
+<!--      </div>-->
+<!--    </div>-->
 
+
+<div class="container bg-light m-4 mx-auto rounded">
+  <br />
+  <div class="row justify-content-center">
+    <div class="auctions-container">
+      <h2>{{ auctions.count }} تعداد مزایده از این محصول موجود است:</h2>
+      <div class="row">
+        {% for auction in auctions %}
+          {% include "auction-card.html" with auction=auction %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
