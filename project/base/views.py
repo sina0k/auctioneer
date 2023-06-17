@@ -381,7 +381,10 @@ def company(request, pk):
         Q(company__id=pk)
     )
 
-    context = {'company': cmp, 'products': products}
+    auctions = Auction.objects.filter(Q(product__company__id=pk)&
+                                      Q(end_time=None))
+
+    context = {'company': cmp, 'products': products,'auctions':auctions}
     return render(request, 'base/company.html', context)
 
 

@@ -39,15 +39,19 @@
 
 </div>
 
-<div class="col-12 col-md-9 auctions-container">
-      <h2>{{ auctions.count }} تعداد مزایده موجود است:</h2>
+<div class="container bg-light m-4 mx-auto rounded">
+  <br />
+  <div class="row justify-content-center">
+    <div class="auctions-container">
+      <h2>{{ auctions.count }} تعداد مزایده از محصولات این شرکت موجود است:</h2>
       <div class="row">
         {% for auction in auctions %}
           {% include "auction-card.html" with auction=auction %}
         {% endfor %}
       </div>
     </div>
-
+  </div>
+</div>
 
 
 
