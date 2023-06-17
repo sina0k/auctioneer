@@ -306,6 +306,10 @@ def createBid(auctionId, user):
     # if auction.last_bid and user.id == auction.last_bid.user.id:
     #     return HttpResponse("You already are the last bidder in this auction!", status=400)
 
+    if user.bids_number <= 0:
+        # TODO throw message that you don't have any bids
+        return HttpResponse('THE USER HAS NO BID!!!', status=404)
+
     bid = Bid.objects.create(
         auction=auction,
         user=user,
@@ -365,9 +369,8 @@ def product(request, pk):
 
     product = Product.objects.get(id=pk)
 
-    auctions = Auction.objects.filter(Q(product__id=pk)&
+    auctions = Auction.objects.filter(Q(product__id=pk) &
                                       Q(end_time=None))
-
 
     context = {'product': product, 'auctions': auctions}
 
@@ -381,10 +384,10 @@ def company(request, pk):
         Q(company__id=pk)
     )
 
-    auctions = Auction.objects.filter(Q(product__company__id=pk)&
+    auctions = Auction.objects.filter(Q(product__company__id=pk) &
                                       Q(end_time=None))
 
-    context = {'company': cmp, 'products': products,'auctions':auctions}
+    context = {'company': cmp, 'products': products, 'auctions': auctions}
     return render(request, 'base/company.html', context)
 
 
@@ -443,3 +446,22 @@ def updateUser(request):
             return redirect('user-profile', pk=user.id)
 
     return render(request, 'base/update_user.html', {'form': form})
+
+@login_required(login_url='login')
+def token(request):
+    user = request.user
+
+    if request.method == 'POST':
+        number = request.POST.get('number_input')
+        if number:
+            tokens = int(number)
+        #   else:
+            # TODO message you haven't put a number
+        # TODO let the user buy tokens
+        return redirect('home')
+
+
+    context = {'user':user}
+    return render(request, 'base/token.html', context)
+
+

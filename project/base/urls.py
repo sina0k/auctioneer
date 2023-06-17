@@ -22,6 +22,8 @@ urlpatterns = [
     path('product/<str:pk>/', views.product, name="product"),
     path('about', views.about, name="about"),
     path('learn', views.learn, name="learn"),
+    path('token', views.token, name="token"),
+
     path('winners', views.winners, name="winners"),
     path('checkout/cart/', views.checkout, name="checkout"),
 

@@ -26,9 +26,10 @@
         </li>
         {% if request.user.is_authenticated %}
         <li>
-          <a class="nav-link" href="{% url 'user-profile' user.id %}"
-            >پروفایل</a
-          >
+          <a class="nav-link" href="{% url 'user-profile' user.id %}">پروفایل</a>
+        </li>
+        <li>
+          <a class="nav-link" href="{% url 'token' %}">خرید توکن مزایده</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'checkout' %}"> سبد خرید </a>
