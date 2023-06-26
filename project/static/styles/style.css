@@ -10,11 +10,11 @@ body {
 }
 
 nav {
-  height: 64px !important;
+  height: 100px !important;
 }
 
 .login-container {
-  height: calc(100% - 64px);
+  height: calc(100% - 100px);
 }
 
 .won-auctions-container {

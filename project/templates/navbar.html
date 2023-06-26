@@ -16,12 +16,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mb-2 mb-lg-0" style="margin-left: auto">
         <li class="nav-item">
-          <a
-            class="nav-link active"
-            aria-current="page"
-            href="{% url 'home' %}"
-          >
-            خانه
+            <a href="{% url 'home' %}">
+              <img  width="80" height="90" src="{% static 'images/favicon.png' %}" alt="">
+            </a>
+        </li>
+        <li class="nav-item">
+
+          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">صفحه اصلی
           </a>
         </li>
         {% if request.user.is_authenticated %}
