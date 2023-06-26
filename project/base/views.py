@@ -310,7 +310,7 @@ def createBid(auctionId, user):
     #     return HttpResponse("You already are the last bidder in this auction!", status=400)
 
     if user.bids_number < 0:
-        # TODO throw message that you don't have any bids
+        # TODO add equal to zero and throw message that you don't have any bids
         return HttpResponse('THE USER HAS NO BID!!!', status=404)
 
     bid = Bid.objects.create(

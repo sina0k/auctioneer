@@ -1,95 +1,104 @@
 {% load static %}
 
 <nav class="navbar navbar-expand-sm bg-body-tertiary">
-  <div class="container-fluid">
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mb-2 mb-lg-0" style="margin-left: auto">
-        <li class="nav-item">
-            <a href="{% url 'home' %}">
-              <img  width="80" height="90" src="{% static 'images/favicon.png' %}" alt="">
-            </a>
-        </li>
-        <li class="nav-item">
+    <div class="container-fluid">
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <style>
+                .navbar-nav .nav-link {
+                    margin-right: 0.8rem;
+                }
+            </style>
+            <ul class="navbar-nav mb-2 mb-lg-0 align-items-center" style="margin-left: auto">
+                <li class="nav-item">
+                    <a href="{% url 'home' %}">
+                        <img width="80" height="90" src="{% static 'images/favicon.png' %}" alt="Logo" class="my-2 mx-1" >
+                    </a>
+                </li>
+                <li class="nav-item">
 
-          <a class="nav-link active" aria-current="page" href="{% url 'home' %}">صفحه اصلی
-          </a>
-        </li>
-        {% if request.user.is_authenticated %}
-        <li>
-          <a class="nav-link" href="{% url 'user-profile' user.id %}">پروفایل</a>
-        </li>
-        <li>
-          <a class="nav-link" href="{% url 'token' %}">خرید توکن مزایده</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'checkout' %}"> سبد خرید </a>
-        </li>
-        {% endif %}
+                    <a class="nav-link active" aria-current="page" href="{% url 'home' %}">صفحه اصلی
+                    </a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <li>
+                    <a class="nav-link" href="{% url 'user-profile' user.id %}">پروفایل</a>
+                </li>
+                <li>
+                    <a class="nav-link" href="{% url 'token' %}">خرید توکن مزایده</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'checkout' %}"> سبد خرید </a>
+                </li>
+                {% endif %}
 
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'winners' %}"> برندگان اخیر </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'about' %}"> درباره ما </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'learn' %}"> راهنمایی </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'product_list' %}"> محصولات </a>
-        </li>
-        {% if request.user.is_authenticated %}
-        <a class="btn btn-outline-danger" href="{% url 'logout' %}">خروج</a>
-        {% else %}
-        <a class="btn btn-outline-success" href="{% url 'login' %}">ورود</a>
-        {% endif %}
-      </ul>
-      <form class="d-flex" role="search" method="get" action="{% url 'home' %}">
-        <input
-          class="form-control me-2"
-          type="search"
-          aria-label="جستجو"
-          type="text"
-          name="q"
-          placeholder="جستجو در مزایده‌ها..."
-        />
-        <button class="btn btn-outline-success" type="submit">جستجو</button>
-      </form>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'winners' %}"> برندگان اخیر </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about' %}"> درباره ما </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'learn' %}"> راهنمایی </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product_list' %}"> محصولات </a>
+                </li>
+                {% if request.user.is_authenticated %}
+                <a class="btn btn-outline-danger" href="{% url 'logout' %}">خروج</a>
+                {% else %}
+                <a class="btn btn-outline-success" href="{% url 'login' %}">ورود</a>
+                {% endif %}
+            </ul>
+            {% if request.user.is_authenticated %}
+            <h5>تعداد توکن‌ها: {{request.user.bids_number}}</h5>
+            {% endif %}
+
+            <form class="d-flex" role="search" method="get" action="{% url 'home' %}">
+                <input
+                        class="form-control me-2"
+                        type="search"
+                        aria-label="جستجو"
+                        type="text"
+                        name="q"
+                        placeholder="جستجو در مزایده‌ها..."
+                />
+                <button class="btn btn-outline-success" type="submit">جستجو</button>
+            </form>
+        </div>
     </div>
-  </div>
 </nav>
 {% comment %}
 <header>
-  <h1>Welcome to Your Penny Auction Website</h1>
-  <nav>
-    {% if request.user.is_authenticated %}
-    <p>Hello {{request.user.name}}</p>
-    <a href="{% url 'user-profile' user.id %}">Profile Panel</a>
-    <hr />
-    <a href="{% url 'update-user'%}">Edit Profile</a>
-    <hr />
-    <a href="{% url 'logout' %}">Logout</a>
-    {% else %}
-    <a href="{% url 'login' %}">Login</a>
-    {% endif %}
+    <h1>Welcome to Your Penny Auction Website</h1>
+    <nav>
+        {% if request.user.is_authenticated %}
+        <p>Hello {{request.user.name}}</p>
+        <a href="{% url 'user-profile' user.id %}">Profile Panel</a>
+        <hr/>
+        <a href="{% url 'update-user'%}">Edit Profile</a>
+        <hr/>
+        <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        {% endif %}
 
-    <ul>
-      <li><a href="{%url 'home'%}">Home</a></li>
-      <li><a href="{%url 'winners'%}">Winners</a></li>
-      <li><a href="{%url 'about'%}">About</a></li>
-      <li><a href="{%url 'learn'%}">Tips & Tricks</a></li>
-    </ul>
-  </nav>
+        <ul>
+            <li><a href="{%url 'home'%}">Home</a></li>
+            <li><a href="{%url 'winners'%}">Winners</a></li>
+            <li><a href="{%url 'about'%}">About</a></li>
+            <li><a href="{%url 'learn'%}">Tips & Tricks</a></li>
+        </ul>
+    </nav>
 </header>
 {% endcomment %}
