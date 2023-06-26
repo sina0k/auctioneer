@@ -267,9 +267,12 @@ def home(request):
     )
     if request.user.is_authenticated:
         won_auctions = Auction.objects.exclude(end_time=None).filter(last_bid__user=request.user).distinct()
+        active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
     else:
         won_auctions = None
-    context = {'auctions': auctions, 'won_auctions': won_auctions, 'BID_STEP': -BID_STEP}
+        going_auctions = None
+    context = {'auctions': auctions, "active_auctions": active_auctions, 'won_auctions': won_auctions,
+               'BID_STEP': -BID_STEP}
     return render(request, 'base/home.html', context)
 
 
@@ -306,7 +309,7 @@ def createBid(auctionId, user):
     # if auction.last_bid and user.id == auction.last_bid.user.id:
     #     return HttpResponse("You already are the last bidder in this auction!", status=400)
 
-    if user.bids_number <= 0:
+    if user.bids_number < 0:
         # TODO throw message that you don't have any bids
         return HttpResponse('THE USER HAS NO BID!!!', status=404)
 
@@ -447,6 +450,7 @@ def updateUser(request):
 
     return render(request, 'base/update_user.html', {'form': form})
 
+
 @login_required(login_url='login')
 def token(request):
     user = request.user
@@ -456,12 +460,9 @@ def token(request):
         if number:
             tokens = int(number)
         #   else:
-            # TODO message you haven't put a number
+        # TODO message you haven't put a number
         # TODO let the user buy tokens
         return redirect('home')
 
-
-    context = {'user':user}
+    context = {'user': user}
     return render(request, 'base/token.html', context)
-
-

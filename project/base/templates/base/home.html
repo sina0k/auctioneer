@@ -2,118 +2,82 @@
 {% block content %}
 
 <script>
-  const intervals = {};
-  const finishTimes = {};
-  const sockets = {};
+    const intervals = {};
+    const finishTimes = {};
+    const sockets = {};
 
-  const hostname = window.location.hostname;
-  const port = window.location.port;
-  const baseUrl = `${hostname}${port ? `:${port}` : ''}`;
+    const hostname = window.location.hostname;
+    const port = window.location.port;
+    const baseUrl = `${hostname}${port ? `:${port}` : ''}`;
 </script>
 
-{% comment %} <div class="container m-4 mx-auto"> {% endcomment %}
-  <br />
-  <div class="row justify-content-center align-items-stretch">
+<br/>
+<div class="row justify-content-center align-items-stretch">
     <div class="col-12 col-md-9 rounded p-3 border border-info">
-      <h2>{{ auctions.count }} تعداد مزایده موجود است:</h2>
-      <div class="row">
-        {% for auction in auctions %}
-          {% include "auction-card.html" with auction=auction %}
-        {% endfor %}
-      </div>
+        <h2>{{ auctions.count }} تعداد مزایده موجود است:</h2>
+        <div class="row">
+            {% for auction in auctions %}
+            {% include "auction-card.html" with auction=auction %}
+            {% endfor %}
+        </div>
     </div>
 
     <div class="col-12 col-md-3 text-center h-100 won-auctions-container">
-      <div class="rounded p-3 h-100 border border-info">
-        <h2>مزایده‌های برنده‌ی شما</h2>
-        <div class="row">
-          <hr />
-          {% if request.user.is_authenticated %}
-            {% for auction in won_auctions %}
-              <div id="active-auction-{{ auction.id }}">
-                <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
-                <div>قیمت: {{ auction.current_price|add:BID_STEP }}</div>
-                <hr />
-              </div>
-            {% endfor %}
-          {% else %}
-            <div>
-              برای مشاهده‌ی این قسمت، <a href="{% url 'login' %}">وارد</a> شوید.
+        <div class="rounded p-3 h-100 border border-info">
+            <h2>مزایده‌هایی که بردید!</h2>
+            <div class="row">
+                <hr/>
+                {% if request.user.is_authenticated %}
+                {% for auction in won_auctions %}
+                <div id="active-auction-{{ auction.id }}">
+                    <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+                    <div>قیمت: {{ auction.current_price }}</div>
+                    {% if not auction.has_paid %}
+                    <div>هنوز قیمت این مزایده را پرداخت نکرده اید.</div>
+                    <form method="get" action={% url 'pay-auction' auction.id %}>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-warning w-100">تکمیل معامله</button>
+                    </form>
+                    {% endif %}
+
+                    <hr/>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div>
+                    برای مشاهده‌ی این قسمت، <a href="{% url 'login' %}">وارد</a> شوید.
+                </div>
+                {% endif %}
             </div>
-          {% endif %}
         </div>
-      </div>
-    </div>
-  </div>
-{% comment %} </div> {% endcomment %}
+        <div class="rounded p-3 h-100 border border-info">
+            <h3>مزایده‌های در حال انجام شما</h3>
+            <div class="row">
+                <hr/>
+                {% if request.user.is_authenticated %}
+                {% if active_auctions %}
 
-{% comment %}
-<style>
-  .home-container {
-    display: grid;
-    grid-template-columns: 4fr 1fr;
-  }
-</style>
-<div class="home-container">
-  <div>
-    <div>
-      <h3>Browse Items</h3>
-      <form method="GET" action="{% url 'home' %}">
-        <input type="text" name="q" placeholder="Search Auctions..." />
-      </form>
-      <hr />
-    </div>
-    <h2>There are {{auction_count}} auctions available</h2>
-    <hr />
-    <div class="container">
-      <div class="auction-grid">
-        {% for auction in auctions %} {% if forloop.counter0|divisibleby:4 %}
-        <div class="auction-column">
-          {% endif %}
-          <div class="auction-card">
-            <a href="{% url 'auction' auction.id %}"
-              ><h2>{{ auction.product.name }}</h2>
-            </a>
-            <p>
-              Buying Price:
-              <span class="price">{{ auction.current_price }}</span>
-            </p>
-            <p>Bid Duration: {{ auction.bid_duration }} Seconds</p>
-            <p>
-              Last Bidder: {% if auction.last_bid %} {{
-              auction.last_bid.user.username }} {% else %}None{% endif %}
-            </p>
-            <form method="POST" action="{% url 'create-bid' auction.id %}">
-              {% csrf_token %}
-              <button type="submit">Bid Now!</button>
-            </form>
-            <!-- Add more details or customizations here -->
-          </div>
-          {% if forloop.counter|divisibleby:4 or forloop.last %}
+                {% for auction in active_auctions %}
+                <div id="active-auction-{{ auction.id }}">
+                    <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+                    <div>قیمت: {{ auction.current_price|add:BID_STEP }}</div>
+                    <hr/>
+                </div>
+                {% endfor %}
+              {% else %}
+                            <a>مزایده‌ی درحال انجام ندارید.</a>
+                {% endif %}
+
+                {% else %}
+                <div>
+                    برای مشاهده‌ی این قسمت، <a href="{% url 'login' %}">وارد</a> شوید.
+                </div>
+                {% endif %}
+            </div>
+
         </div>
-        {% endif %}
-        <hr />
-
-        {% endfor %} {% if not auctions %}
-        <p>No auctions available.</p>
-        {% endif %}
-      </div>
     </div>
-  </div>
-  <div>
-    <h2>Recent Wins</h2>
-    {% for deal in won_deals%}
-    <div>
-      <small
-        ><a href="{% url 'user-profile' deal.user.id %}">@{{deal.user}} </a
-        >{{deal.date_modified|timesince}}</small
-      >
-      <p>has won: {{deal.product.name}}</p>
-      <p>at price: {{deal.transaction.price}}</p>
-      <hr />
-    </div>
-
-    {% endfor%}
-  </div>
 </div>
-{% endcomment %} {% endblock content %}
+</div>
+
+{% endblock content %}
