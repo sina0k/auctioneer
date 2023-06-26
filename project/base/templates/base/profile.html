@@ -1,6 +1,8 @@
 {% extends "main.html" %}
 {% load static %}
 
+
+
 {% block content %}
 
 <div class="container d-flex flex-column align-items-center mt-4">
@@ -16,7 +18,7 @@
 
     <h2>تعداد توکن های مزایده شما: {{ user.bids_number }}</h2>
 
-    <a href="{% url 'update-user' %}" class="btn btn-info">خرید توکن مزایده</a>
+    <a href="{% url 'token' %}" class="btn btn-info">خرید توکن مزایده</a>
 
     {% endif %}
 
@@ -58,23 +60,39 @@
             <div class="accordion-body">
                 {% for deal in deals %}
                     <div class="d-flex align-items-center">
-                        <img class="history-image p-2" width="auto" height="auto" src="{% if buying_product.product.image %}/{{ buying_product.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
 
                         <div>
-                            <p>محصولات خریده شده:</p>
+
+                            <p> تاریخ معامله: {{ deal.date_modified }}</p>
+                            <p>(Iranian calendar): {{ deal.date_modified }}</p>
+                            <h4>مبلغ: {{ deal.transaction.price }}</h4>
+
+                            {% if deal.discount %}
+                            <h5>تخفیف: %{{ deal.discount.discount_percentage }}</h5>
+                            {% else %}
+                            <h5>بدون تخفیف</h5>
+                            {% endif %}
+
+
+                            <p>شناسه تراکنش: {{deal.transaction.payment_number }}</p>
+
+                            {% if deal.deal_type == 'Auction' %}
+                            <p>نوع معامله: برنده شدن در مزایده کالا </p>
+                            {% else %}
+                            <p>نوع معامله: خرید به قیمت اصلی کالا </p>
+                            {% endif %}
+
+                            <p>محصولات:</p>
+
                             {% for buying_product in deal.cart.products.all %}
+                            <hr>
+                            <img class="history-image p-2" width="auto" height="auto" src="{% if buying_product.product.image %}/{{ buying_product.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
                             <p> محصول: {{ buying_product.product.name }}</p>
                             <p>تعداد: {{ buying_product.quantity }}</p>
                             {% endfor %}
-                            {% if deal.deal_type == 'Auction' %}
-                            <p>این معامله مزایده بوده است </p>
-                            {% else %}
-                            <p>این معامله خرید بوده است </p>
-                            {% endif %}
-                            <small>در تاریخ: {{ deal.date_modified }}</small>
-                            
+
+
                             <!--                        <p>نوع معامله: {{ deal.deal_type }}</p>-->
-                            <p>با قیمت: {{ deal.transaction.price }}</p>
                         </div>
                     </div>
                     <hr>
