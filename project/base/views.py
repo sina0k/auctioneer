@@ -266,10 +266,10 @@ def home(request):
         end_time__lt=now - timedelta(hours=2)
     )
     if request.user.is_authenticated:
-        active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
+        won_auctions = Auction.objects.exclude(end_time=None).filter(last_bid__user=request.user).distinct()
     else:
-        active_auctions = None
-    context = {'auctions': auctions, 'active_auctions': active_auctions}
+        won_auctions = None
+    context = {'auctions': auctions, 'won_auctions': won_auctions, 'BID_STEP': -BID_STEP}
     return render(request, 'base/home.html', context)
 
 

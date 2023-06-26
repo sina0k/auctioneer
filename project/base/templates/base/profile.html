@@ -14,14 +14,13 @@
     {% if owner_user %}
     <a href="{% url 'update-user' %}" class="btn btn-info">ویرایش پروفایل</a>
 
-    <h2>تعداد توکن های مزایده شما: {{user.bids_number}}</h2>
+    <h2>تعداد توکن های مزایده شما: {{ user.bids_number }}</h2>
 
     <a href="{% url 'update-user' %}" class="btn btn-info">خرید توکن مزایده</a>
 
     {% endif %}
 
     <br />
-
 
     <div class="accordion w-100" id="accordionExample">
         {% if owner_user %}
@@ -34,12 +33,15 @@
             <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                 <div class="accordion-body">
                     {% for bid in bids %}
-                        <div>
-                            <p>{{ bid.auction.product.name }}</p>
-                            <p>با قیمت: {{ bid.price }}</p>
-                            <p>در تاریخ: {{ bid.created_at }}</p>
-                            <hr />
+                        <div class="d-flex align-items-center">
+                            <img class="history-image p-2" width="auto" height="auto" src="{% if bid.auction.product.image %}/{{ bid.auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+                            <div>
+                                <p>{{ bid.auction.product.name }}</p>
+                                <p>با قیمت: {{ bid.price }}</p>
+                                <p>در تاریخ: {{ bid.created_at }}</p>
+                            </div>
                         </div>
+                        <hr />
                     {% endfor %}
                 </div>
             </div>
@@ -55,23 +57,27 @@
           <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
             <div class="accordion-body">
                 {% for deal in deals %}
-                    <div>
-                        <p>محصولات خریده شده:</p>
-                        {% for buying_product in deal.cart.products.all %}
+                    <div class="d-flex align-items-center">
+                        <img class="history-image p-2" width="auto" height="auto" src="{% if buying_product.product.image %}/{{ buying_product.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+
+                        <div>
+                            <p>محصولات خریده شده:</p>
+                            {% for buying_product in deal.cart.products.all %}
                             <p> محصول: {{ buying_product.product.name }}</p>
                             <p>تعداد: {{ buying_product.quantity }}</p>
-                        {% endfor %}
-                        {% if deal.deal_type == 'Auction' %}
-                        <p>این معامله مزایده بوده است </p>
-                        {% else %}
-                        <p>این معامله خرید بوده است </p>
-                        {% endif %}
-                        <small>در تاریخ: {{ deal.date_modified }}</small>
-
-<!--                        <p>نوع معامله: {{ deal.deal_type }}</p>-->
-                        <p>با قیمت: {{ deal.transaction.price }}</p>
-                        <hr>
+                            {% endfor %}
+                            {% if deal.deal_type == 'Auction' %}
+                            <p>این معامله مزایده بوده است </p>
+                            {% else %}
+                            <p>این معامله خرید بوده است </p>
+                            {% endif %}
+                            <small>در تاریخ: {{ deal.date_modified }}</small>
+                            
+                            <!--                        <p>نوع معامله: {{ deal.deal_type }}</p>-->
+                            <p>با قیمت: {{ deal.transaction.price }}</p>
+                        </div>
                     </div>
+                    <hr>
                 {% empty %}
                     معامله‌ای وجود ندارد!
                 {% endfor %}

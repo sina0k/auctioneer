@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html dir="rtl">
+<html lang="fa" dir="rtl">
   <head>
     <meta charset="UTF-8" />
     {% comment %} <meta http-equiv="X-UA-Compatible" content="IE=edge" /> {% endcomment %}
@@ -32,8 +32,8 @@
       crossorigin="anonymous"
     ></script>
   </head>
-  <body>
-    {% include 'navbar.html' %}
+  <body class="pb-4">
+    {% include "navbar.html" %}
 
     {% if messages %}
     <ul class="messages">
@@ -43,7 +43,12 @@
     </ul>
     {% endif %}
 
-    {% block content %}
-    {% endblock %}
+    <div class="container">
+      <div class="blurred p-4">
+        {% block content %}
+        {% endblock content %}
+      </div>
+    </div>
+    <br>
   </body>
 </html>

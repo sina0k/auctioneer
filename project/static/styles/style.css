@@ -3,8 +3,10 @@
 /* Reset default styles */
 
 body {
-  background-color: powderblue;
-  height: 100vh;
+  background-image: url("/static/images/Designer.png");
+  background-size: contain;
+  height: 100%;
+  min-height: 100vh;
 }
 
 nav {
@@ -15,18 +17,42 @@ nav {
   height: calc(100% - 64px);
 }
 
-.auctions-container {
-  border-left: solid 1px black;
+.won-auctions-container {
+  padding-right: 8px;
+}
+
+.blurred {
+  backdrop-filter: blur(8px);
 }
 
 .img-container {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 200px;
+}
+
+.img-container img {
+  max-width: 200px;
+  max-height: 200px;
+}
+
+.history-image {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
 }
 
 .sold-image {
   position: absolute;
-  top: 5%;
-  left: 5%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .accordion-button:after {
@@ -34,11 +60,10 @@ nav {
 }
 
 @media (max-width: 768px) {
-  .auctions-container {
-    border-left: none;
-    border-bottom: solid 1px black;
-    margin-bottom: 8px;
-    padding-bottom: 8px;
+  .won-auctions-container {
+    margin-top: 8px;
+    padding-right: 0;
+    padding-left: 0;
   }
 
   .login-container {

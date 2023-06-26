@@ -13,8 +13,6 @@
 
         </div>
     </div>
-
-
 </div>
 
 <hr />
@@ -30,19 +28,15 @@
         <div class="col-3">توضیحات:<br />{{ p.description }}</div>
         <div class="col-2">قیمت:<br />{{ p.price }} تومان</div>
         <div class="col-2">نوع محصول:<br />{{ p.category }} </div>
-
-
     </div>
     <hr />
     {% endfor %}
-
-
 </div>
 
 <div class="container bg-light m-4 mx-auto rounded">
   <br />
   <div class="row justify-content-center">
-    <div class="auctions-container">
+    <div>
       <h2>{{ auctions.count }} تعداد مزایده از محصولات این شرکت موجود است:</h2>
       <div class="row">
         {% for auction in auctions %}
@@ -52,8 +46,5 @@
     </div>
   </div>
 </div>
-
-
-
 
 {% endblock content %}
