@@ -16,7 +16,7 @@
 <div class="row justify-content-center">
 
 
-    <div class="col-12 col-md-9 rounded p-3 border border-info d-flex flex-column">
+    <div class="col-12 col-md-9 rounded p-3 border border-info d-flex flex-column background_auction">
         <div class="row">
             {% for auction in auctions %}
             {% include "auction-card.html" with auction=auction %}
@@ -26,7 +26,7 @@
 
     <div class="col-12 col-md-3 text-center h-100 won-auctions-container">
 
-        <div class="rounded p-3 h-100 border border-info">
+        <div class="rounded p-3 h-100 border border-info background_user_items">
 
             <h2>مزایده‌هایی که بردید!</h2>
             <div class="row">
@@ -40,17 +40,22 @@
                     <div class="col-8">
                         <div id="active-auction-{{ auction.id }}">
                             <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
-                            <div>قیمت: {{ auction.current_price }}</div>
+                            <br>
+
+
+                            <div style="font-size: 18px; margin-top: 7px;">قیمت کالا: {{ auction.product.price }}</div>
 
                         </div>
 
                     </div>
-                    <div class="col-4"><a href=" {% url 'product' auction.product.id %}">
+                    <div class="col-4"><a href="{% url 'auction' auction.id %}">
                         <img width="200%" height="200%"
                              src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
                              alt="">
                     </a></div>
-                    {% if not auction.has_paid %}
+                    {% if auction.has_paid %}
+                    <p> قیمت خریداری شده: {{auction.current_price|add:BID_STEP}}</p>
+                    {% else %}
                     <div style="margin-top: 25px; margin-bottom: 10px;font-size: 18px;">
                         هنوز قیمت این مزایده را پرداخت نکرده اید.
                     </div>
@@ -70,7 +75,7 @@
                 {% endif %}
             </div>
         </div>
-        <div class="rounded p-3 h-100 border border-info">
+        <div class="rounded p-3 h-100 border border-info background_user_items">
             <h3>مزایده‌های در حال انجام شما</h3>
             <div class="row">
                 <hr/>
@@ -78,11 +83,38 @@
                 {% if active_auctions %}
 
                 {% for auction in active_auctions %}
-                <div id="active-auction-{{ auction.id }}">
-                    <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
-                    <div>قیمت: {{ auction.current_price|add:BID_STEP }}</div>
-                    <hr/>
+                <div class="row fs-4 text-center align-items-center p-2">
+
+                    <div class="col-8">
+                        <div id="active-auction-{{ auction.id }}">
+                            <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+                            <div>قیمت فعلی: {{ auction.current_price|add:BID_STEP }}</div>
+
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <a href="{% url 'auction' auction.id %}">
+                            <img width="200%" height="200%"
+                                 src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                                 alt="">
+                        </a>
+                    </div>
                 </div>
+
+                <form method="post" action="{% url 'create-bid-home' auction.id %}">
+                    {% csrf_token %}
+                    <button
+                            {% if auction.end_time or auction.last_bid and auction.last_bid.user.id == request.user.id %}
+                            disabled
+                            {% endif %}
+                            id="{{ auction.id }}-bid-button"
+                            class="btn btn-success w-90 double_btn"
+                            type="submit">
+                        پیشنهاد
+                    </button>
+                </form>
+
+                <hr>
                 {% endfor %}
                 {% else %}
                 <a>مزایده‌ی درحال انجام ندارید.</a>
