@@ -93,7 +93,7 @@ nav {
     margin-right: 1rem;
 }
 
-.row.justify-content-center{
+.container.bg-light.m-4.mx-auto.rounded{
     margin-top: -1.5rem;
     background: #ff0000 url('/static/images/Homepage_Left_Box.jpg') center center;
 

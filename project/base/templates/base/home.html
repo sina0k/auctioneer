@@ -1,5 +1,6 @@
 {% extends "main.html" %}
 {% block content %}
+{% load static %}
 
 <script>
     const intervals = {};
@@ -27,24 +28,41 @@
     <div class="col-12 col-md-3 text-center h-100 won-auctions-container">
 
         <div class="rounded p-3 h-100 border border-info">
+
             <h2>مزایده‌هایی که بردید!</h2>
             <div class="row">
                 <hr/>
                 {% if request.user.is_authenticated %}
+
+
                 {% for auction in won_auctions %}
-                <div id="active-auction-{{ auction.id }}">
-                    <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
-                    <div>قیمت: {{ auction.current_price }}</div>
+                <div class="row fs-4 text-center align-items-center p-2" style="margin-top: 15px; margin-bottom: 10px;">
+
+                    <div class="col-8">
+                        <div id="active-auction-{{ auction.id }}">
+                            <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+                            <div>قیمت: {{ auction.current_price }}</div>
+
+                        </div>
+
+                    </div>
+                    <div class="col-4"><a href=" {% url 'product' auction.product.id %}">
+                        <img width="200%" height="200%"
+                             src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                             alt="">
+                    </a></div>
                     {% if not auction.has_paid %}
-                    <div>هنوز قیمت این مزایده را پرداخت نکرده اید.</div>
+                    <div style="margin-top: 25px; margin-bottom: 10px;font-size: 18px;">
+                        هنوز قیمت این مزایده را پرداخت نکرده اید.
+                    </div>
                     <form method="get" action="{% url 'pay-auction' auction.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-warning w-100">تکمیل معامله</button>
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-warning w-100">تکمیل معامله</button>
                     </form>
                     {% endif %}
-
-                    <hr/>
                 </div>
+                <hr/>
+
                 {% endfor %}
                 {% else %}
                 <div>
