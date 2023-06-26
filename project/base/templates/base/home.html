@@ -13,11 +13,10 @@
 </script>
 
 <br/>
-<div class="row justify-content-center align-items-stretch">
+<div class="row justify-content-center">
 
 
-    <div class="col-12 col-md-9 rounded p-3 border border-info">
-        <!--        <h2>{{ auctions.count }} تعداد مزایده موجود است:</h2>-->
+    <div class="col-12 col-md-9 rounded p-3 border border-info d-flex flex-column">
         <div class="row">
             {% for auction in auctions %}
             {% include "auction-card.html" with auction=auction %}

@@ -14,12 +14,12 @@
         <img hidden width="auto" height="auto" id="{{ auction.id }}-sold-image" class="sold-image" src="{% static 'images/sold-out.png' %}" alt="">
       </div>
       <div class="card-body">
-        <h3 class="card-title">{{ auction.product.name }}</h3>
+        <h3 class="card-title text-center">{{ auction.product.name }}</h3>
         <div class="card-text">
-          <div id="{{ auction.id }}-price">
+          <div id="{{ auction.id }}-price" class="margin_text">
             قیمت: {{ auction.current_price }}
           </div>
-          <div id="{{ auction.id }}-last-bidder">    
+          <div id="{{ auction.id }}-last-bidder" class="=margin_text">
             {% if auction.end_time %}
               برنده:
             {% else %}
@@ -32,7 +32,8 @@
             </a>
             {% else %} هیچکس {% endif %}
           </div>
-          <h4 id="{{ auction.id }}-time" class="w-100 text-center">
+          <h4 id="{{ auction.id }}-time" class="w-100 text-center margin_text">
+
             {% if not auction.last_bid %}
               هنوز شروع نشده!
             {% elif auction.end_time %}
@@ -51,7 +52,7 @@
               disabled
             {% endif %}
             id="{{ auction.id }}-bid-button"
-            class="btn btn-success w-100"
+            class="btn btn-success w-100 "
             type="submit">
               پیشنهاد
             </button>
@@ -59,7 +60,7 @@
           <form method="post">
                   {% csrf_token %}
                   <input type="hidden" value="{{ auction.product.id }}" name="product">
-                  <button type="submit" class="btn btn-info w-100">اکنون بخرید</button>
+                  <button type="submit" class="btn btn-info w-100 double_btn">اکنون بخرید</button>
           </form>
         </div>
       </div>
@@ -99,7 +100,7 @@
     sockets[{{ auction.id }}].onopen = () => {
       console.log('WebSocket connection opened.');
     };
-    
+
     // Event handler for WebSocket received message
     sockets[{{ auction.id }}].onmessage = (event) => {
       const message = JSON.parse(event.data);
@@ -108,7 +109,7 @@
       document.getElementById("{{ auction.id }}-last-bidder").innerHTML = `آخرین پیشنهاد: <a href="/profile/${message.id}">${message.name}</a>`
       document.getElementById("{{ auction.id }}-price").innerText = `قیمت: ${message.price} تومان`
 
-      
+
       finishTimes[{{ auction.id }}] = new Date(message.created_at);
       finishTimes[{{ auction.id }}].setSeconds(finishTimes[{{ auction.id }}].getSeconds() + {{ auction.bid_duration }});
 
@@ -127,12 +128,12 @@
         }, 1000);
       }
     };
-    
+
     // Event handler for WebSocket connection close
     sockets[{{ auction.id }}].onclose = () => {
       console.log('WebSocket connection closed.');
     };
-    
+
     // Event handler for WebSocket connection error
     sockets[{{ auction.id }}].onerror = (error) => {
       console.error('WebSocket error:', error);
