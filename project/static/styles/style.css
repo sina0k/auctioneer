@@ -76,7 +76,7 @@ nav {
 .background_auction {
     box-sizing: border-box;
     padding: 4rem !important;
-    background: #ff0000 url('/static/images/Homepage_Left_Box.jpg') center center;
+    background: #ffffff url('/static/images/Homepage_Left_Box.jpg') center center;
 
 }
 
@@ -84,7 +84,7 @@ nav {
 .background_user_items {
     box-sizing: border-box;
     padding: 3rem !important;
-    background: #ff0000 url('/static/images/Homepage_Left_Box.jpg') center center;
+    background: #ffffff url('/static/images/Homepage_Left_Box.jpg') center center;
 }
 
 .navbar-nav .nav-link {
@@ -95,7 +95,7 @@ nav {
 .product_list {
     box-sizing: border-box;
     padding: 3rem;
-    background: #ff0000 url('/static/images/product_list.jpg') repeat center center;
+    background: #ffffff url('/static/images/product_list.jpg') repeat center center;
 }
 
 .double_btn{
@@ -111,7 +111,7 @@ nav {
 
     box-sizing: border-box;
     padding: 3rem;
-    background: #ff0000 url('/static/images/list_background.jpg') repeat center center;
+    background: #ffffff url('/static/images/list_background.jpg') repeat center center;
     background-size: 60%;
 }
 

@@ -16,17 +16,21 @@
 
 
     <div class="row fs-4 text-center align-items-center p-2">
-         <div class="col-2" >
+        <div class="col-2 m-auto">
+            <div class="row">
 
-             <a href=" {% url 'product' p.product.id %}">
-               <img width="100%" height="100%" src="{% if p.product.image %}/{{ p.product.image }}{% else %}{% static 'images/product.png' %}{% endif %}" alt="">
-           </a>
-
+                <a href=" {% url 'product' p.product.id %}">
+                    <img width="50px" height="auto"
+                         src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                         class="card-img-top"
+                         alt=""></a>
+                <a href=" {% url 'product' p.product.id %}">{{ p.product.name }}</a>
+            </div>
         </div>
-        <div class="col-2"><a href=" {% url 'product' p.product.id %}">{{ p.product.name }}</a></div>
         <div class="col-2">قیمت خریداری شده:<br/>{{ deal.transaction.price }} تومان</div>
         <div class="col-2">قیمت واقعی کالا:<br/>{{ p.product.price }} تومان</div>
-        <div class="col-1">شرکت:<br/>{{ p.product.company.name }}</div>
+        <div class="col-2">شرکت:<br/>{{ p.product.company.name }}</div>
+
         <div class="col-1">برنده مزایده:<br/><a href="{% url 'user-profile' deal.user.id %}">{{ deal.user.username }}</a></div>
         <div class="col-2">
             <a href=" {% url 'user-profile' deal.user.id %}">
