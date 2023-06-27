@@ -98,14 +98,31 @@ nav {
     background: #ffffff url('/static/images/product_list.jpg') repeat center center;
 }
 
+.profile_list {
+    box-sizing: border-box;
+    padding: 3rem;
+    background: #ffffff url('/static/images/update-profule-background.jpeg') repeat center center;
+}
+
 .double_btn{
     margin-bottom: 8px;
+    margin-top: 6px;
 }
 
 .margin_text{
     margin-top: 3px;
     margin-bottom: 8px;
 }
+
+.card-list {
+    box-sizing: border-box;
+
+    padding: 2.5rem;
+    background: #ffffff url('/static/images/OPmnVHRQ.jpeg') repeat center center;
+    background-size: 100%;
+}
+
+
 
 .background_items{
 
