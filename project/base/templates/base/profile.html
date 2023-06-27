@@ -14,12 +14,14 @@
     {% endif %}
 
     {% if owner_user %}
-    <a href="{% url 'update-user' %}" class="btn btn-info">ویرایش پروفایل</a>
+    <a href="{% url 'update-user' %}" class="btn btn-info double_btn">ویرایش پروفایل</a>
 
-    <h2>تعداد توکن های مزایده شما: {{ user.bids_number }}</h2>
 
-    <a href="{% url 'token' %}" class="btn btn-info">خرید توکن مزایده</a>
+    <a href="{% url 'token' %}" class="btn btn-info double_btn">خرید توکن مزایده</a>
+    <div style="margin-left:2rem; margin-top: 1px;font-size: 21px;">
 
+        تعداد توکن های مزایده شما: {{ user.bids_number }}
+    </div>
     {% endif %}
 
     <br/>

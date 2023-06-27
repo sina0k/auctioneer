@@ -60,7 +60,10 @@
                 </div>
             </ul>
             {% if request.user.is_authenticated %}
-            <h5>تعداد توکن‌ها: {{request.user.bids_number}}</h5>
+            <div style="margin-left:2rem; margin-top: 1px;font-size: 17px;">
+
+                تعداد توکن‌ها: {{request.user.bids_number}}
+            </div>
             {% endif %}
 
             <form class="d-flex" role="search" method="get" action="{% url 'home' %}">

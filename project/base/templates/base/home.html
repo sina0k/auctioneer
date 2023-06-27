@@ -54,7 +54,10 @@
                              alt="">
                     </a></div>
                     {% if auction.has_paid %}
+                    <div style="margin-top: 25px; margin-bottom: 10px;font-size: 22px;">
+
                     <p> قیمت خریداری شده: {{auction.current_price|add:BID_STEP}}</p>
+                    </div>
                     {% else %}
                     <div style="margin-top: 25px; margin-bottom: 10px;font-size: 18px;">
                         هنوز قیمت این مزایده را پرداخت نکرده اید.

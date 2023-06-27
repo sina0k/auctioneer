@@ -104,12 +104,12 @@ nav {
     background: #ffffff url('/static/images/update-profule-background.jpeg') repeat center center;
 }
 
-.double_btn{
+.double_btn {
     margin-bottom: 8px;
     margin-top: 6px;
 }
 
-.margin_text{
+.margin_text {
     margin-top: 3px;
     margin-bottom: 8px;
 }
@@ -122,9 +122,16 @@ nav {
     background-size: 100%;
 }
 
+.auction-card-shade {
+
+    /*background: linear-gradient(to bottom, #dfdfdf, #ffffff);*/
+      background: linear-gradient(45deg, #d0e1d0, #ffffff);
 
 
-.background_items{
+}
+
+
+.background_items {
 
     box-sizing: border-box;
     padding: 3rem;
@@ -132,9 +139,10 @@ nav {
     background-size: 60%;
 }
 
-.custom-row{
-    max-width:160%;
+.custom-row {
+    max-width: 160%;
 }
+
 /*body, h1, h2, h3, p, img, a {*/
 /*  margin: 0;*/
 /*  padding: 0;*/
