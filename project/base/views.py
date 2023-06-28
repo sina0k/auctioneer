@@ -270,7 +270,7 @@ def home(request):
         active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
     else:
         won_auctions = None
-        going_auctions = None
+        active_auctions = None
     context = {'auctions': auctions, "active_auctions": active_auctions, 'won_auctions': won_auctions,
                'BID_STEP': -BID_STEP}
     return render(request, 'base/home.html', context)
