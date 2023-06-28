@@ -3,17 +3,17 @@
 {% block content %}
 
 <br>
-<div class="rounded background_auction buy-token-container">
+<div class="rounded background_auction buy-token-container w-75 mt-5 my-5 m-auto">
   <div class="w-100 text-center mb-4">
     <h2>شما {{ user.bids_number }} توکن مزایده دارید.</h2>
     <br>
-    <h3>قیمت خرید هر توکن: ۵۰۰۰ تومان</h3>
+    <h3>قیمت خرید هر توکن: ۸۰۰ تومان</h3>
   </div>
   <br>
     
-  <div class="container-fluid mt-4">
+  <div class="container mt-4">
     <div class="row mb-4">
-      <div class="col-6 col-lg-3">
+      <div class="col-6 col-lg-3 px-3">
         <div class="card mb-4">
           <img
             width="auto"
@@ -23,7 +23,9 @@
             alt=""
           />
           <div class="card-body auction-card-shade">
-            <h3 class="card-title text-center">۵ توکن مزایده</h3>
+            <div class="card-title text-center" style="font-size: 20pt;">۵ توکن مزایده</div>
+            <div class="card-title text-center" style="font-size: 16pt;">قیمت: ۴۰۰۰ تومان</div>
+
             <div class="card-text">
               <form method="post" action="{% url 'token' %}">
                 {% csrf_token %}
@@ -34,7 +36,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6 col-lg-3">
+      <div class="col-6 col-lg-3 px-3">
         <div class="card mb-4">
           <img
             width="auto"
@@ -44,7 +46,8 @@
             alt=""
           />
           <div class="card-body auction-card-shade">
-            <h3 class="card-title text-center">۱۰ توکن مزایده</h3>
+            <div class="card-title text-center" style="font-size: 20pt;">۱۰ توکن مزایده</div>
+            <div class="card-title text-center" style="font-size: 16pt;">قیمت: ۸۰۰۰ تومان</div>
             <div class="card-text">
               <form method="post" action="{% url 'token' %}">
                 {% csrf_token %}
@@ -55,7 +58,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6 col-lg-3">
+      <div class="col-6 col-lg-3 px-3">
         <div class="card mb-4">
           <img
             width="auto"
@@ -65,7 +68,8 @@
             alt=""
           />
           <div class="card-body auction-card-shade">
-            <h3 class="card-title text-center">۵۰ توکن مزایده</h3>
+            <div class="card-title text-center" style="font-size: 20pt;">۵۰ توکن مزایده</div>
+            <div class="card-title text-center" style="font-size: 16pt;">قیمت: ۴۰۰۰۰ تومان</div>
             <div class="card-text">
               <form method="post" action="{% url 'token' %}">
                 {% csrf_token %}
@@ -76,7 +80,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6 col-lg-3">
+      <div class="col-6 col-lg-3 px-3">
         <div class="card mb-4">
           <img
             width="auto"
@@ -86,7 +90,8 @@
             alt=""
           />
           <div class="card-body auction-card-shade">
-            <h3 class="card-title text-center">۱۰۰ توکن مزایده</h3>
+            <div class="card-title text-center" style="font-size: 20pt;">۱۰۰ توکن مزاید</div>
+            <div class="card-title text-center" style="font-size: 16pt;">قیمت: ۸۰۰۰۰ تومان</div>
             <div class="card-text">
               <form method="post" action="{% url 'token' %}">
                 {% csrf_token %}
