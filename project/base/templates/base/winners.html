@@ -3,12 +3,14 @@
 
 {% block content %}
 
-
-<h2>برندگان مزایده‌های ۲۴ ساعت اخیر</h2>
+<div class="justify-content-center w-100 text-center" style="margin-top: 35px;
+    margin-bottom: 20px;font-size: 22px;">
+    <h2>برندگان مزایده‌های ۲۴ ساعت اخیر</h2>
+</div>
 </br>
 </hr>
 
-<div class="container background_items">
+<div class="container rounded background_items">
     {% for deal in won_deals%}
     {% with p=deal.cart.products.all|first %}
     {% if p %}
