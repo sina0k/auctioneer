@@ -6,7 +6,9 @@
   font-family: "Nazanin";
   src: url("/static/fonts/B-NAZANIN.TTF") format("truetype");
 }
-
+html {
+    font-size: 21px;
+}
 body {
   font-family: Nazanin;
   background-image: url("/static/images/Designer.png");
