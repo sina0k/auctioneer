@@ -29,6 +29,12 @@ nav {
 
 .won-auctions-container {
   padding-right: 8px;
+  padding-left: 0;
+}
+
+.active-auctions-container {
+  padding-left: 8px;
+  padding-right: 0;
 }
 
 .blurred {
