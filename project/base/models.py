@@ -5,6 +5,7 @@ from enum import Enum
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 BID_STEP = 100
+BID_PRICE = 800
 
 
 class DealType(Enum):
@@ -78,6 +79,7 @@ class User(AbstractUser):
     bids_number = models.IntegerField(default=0)
     bio = models.TextField(null=True, blank=True)
     avatar = models.ImageField(upload_to="uploads/users/", null=True, blank=True)
+    bids_to_add = models.IntegerField(default=0)
 
     # User has fields: shopping_cart, bids, deals which is defined in those classes with related_name attribute, SO COOL!
 
