@@ -35,9 +35,15 @@
             integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
             crossorigin="anonymous"
     ></script>
-</head>
-<body class="pb-4">
-{% include "navbar.html" %}
+    <style>
+      body {
+        background-image: url("/static/images/Designer.png");
+        background-size: contain;
+      }
+    </style>
+  </head>
+  <body class="pb-4">
+    {% include "navbar.html" %}
 
 {% if messages %}
 <ul class="messages">
