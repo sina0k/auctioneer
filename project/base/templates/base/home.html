@@ -35,6 +35,7 @@
                         <a href="{% url 'auction' auction.id %}">
                             <img width="120%" height="100%"
                                  src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                                 class="rounded-5"
                                  alt="">
                         </a>
                     </div>
@@ -99,6 +100,7 @@
                     <div class="col-4 p-0"><a href="{% url 'auction' auction.id %}">
                         <img width="120%" height="120%"
                              src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                             class="rounded-5"
                              alt="">
                     </a></div>
                     {% if auction.has_paid %}

@@ -40,7 +40,7 @@
                 <div class="accordion-body">
                     {% for bid in bids %}
                     <div class="d-flex align-items-center">
-                        <img class="history-image p-2" width="auto" height="auto"
+                        <img class="history-image p-2 rounded rounded-5" width="auto" height="auto"
                              src="{% if bid.auction.product.image %}/{{ bid.auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
                              alt="">
                         <div>
@@ -92,7 +92,7 @@
                             <p>محصولات:</p>
 
                             {% for buying_product in deal.cart.products.all %}
-                            <img class="history-image p-2" width="auto" height="auto"
+                            <img class="history-image p-2 rounded rounded-5" width="auto" height="auto"
                                  src="{% if buying_product.product.image %}/{{ buying_product.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
                                  alt="">
                             <p> محصول: {{ buying_product.product.name }}</p>
