@@ -221,9 +221,7 @@ def loginPage(request):
             login(request, user)
             return redirect('home')
         else:
-            messages.error(request, 'Username OR password does not exit')
-
-        return redirect('home')
+            context["error"] = "نام کاربری یا رمز عبور صحیح نیست!"
 
     return render(request, 'base/login_register.html', context)
 
@@ -251,6 +249,8 @@ def logoutUser(request):
 
 
 def home(request):
+    error = request.GET.get('error')
+
     q = request.GET.get('q') if request.GET.get('q') != None else ''
     now = timezone.now()
 
@@ -274,7 +274,7 @@ def home(request):
         won_auctions = None
         active_auctions = None
     context = {'auctions': auctions, "active_auctions": active_auctions, 'won_auctions': won_auctions,
-               'BID_STEP': -BID_STEP}
+               'BID_STEP': -BID_STEP, "error": error}
     return render(request, 'base/home.html', context)
 
 
@@ -293,29 +293,28 @@ def product_list(request):
 @login_required(login_url='login')
 def createBidHomePage(request, auctionId):
     if request.method == 'POST':
-        createBid(auctionId, request.user)
+        try:
+            createBid(auctionId, request.user)
+        except Exception as e:
+            return redirect(f'/?error={str(e)}')
 
         return redirect('/')
 
 
 def createBid(auctionId, user):
-    # TODO throw exceptions instead of returning HttpResponse, & catch them in caller functions
     try:
         auction = Auction.objects.get(id=auctionId)
     except ObjectDoesNotExist:
-        return HttpResponse('Auction not found!', status=404)
-    # if auction.start_time > timezone.now():
-    #     return HttpResponse('Auction has not started', status=400)
-    # if auction.end_time:
-    #     return HttpResponse('Auction has ended!', status=400)
-    # if auction.last_bid and user.id == auction.last_bid.user.id:
-    #     return HttpResponse("You already are the last bidder in this auction!", status=400)
+        raise Exception("مزایده وجود ندارد!") # TODO define NotFoundException
+    if auction.start_time > timezone.now():
+        raise Exception('مزایده آغاز نشده است!')
+    if auction.end_time:
+        raise Exception('مزایده پایان یافته است!')
+    if auction.last_bid and user.id == auction.last_bid.user.id:
+        raise Exception("شما بالاترین قیمت را در حال حاضر پیشنهاد داده‌اید!")
 
     if user.bids_number <= 0:
-        # TODO add equal to zero and throw message that you don't have any bids
-        # return HttpResponse('THE USER HAS NO BID!!!', status=404)
-        pass
-        # TODO do sth about error handling in whole website!!!
+        raise ValueError("مقدار توکن‌های شما کافی نیست!")
     else:
         user.bids_number -= 1
         user.save()

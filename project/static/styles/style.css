@@ -9,8 +9,15 @@ body {
     min-height: 100vh;
 }
 
+#my-toast {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 nav {
-    height: 100px !important;
+  height: 100px !important;
 }
 
 .login-container {
@@ -23,13 +30,14 @@ nav {
 }
 
 .login-container img {
-    min-height: calc(100vh - 64px);
-    min-width: 50vw;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+  border-radius: 2rem;
 }
 
 .won-auctions-container {
-    padding-right: 8px;
-    padding-left: 0;
+  padding-right: 8px;
+  padding-left: 0;
 }
 
 .active-auctions-container {
@@ -115,7 +123,7 @@ nav {
 }
 
 .fit-content {
-    width: fit-content;
+  width: fit-content;
 }
 
 .product_list {
