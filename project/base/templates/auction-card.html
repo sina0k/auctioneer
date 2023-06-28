@@ -108,7 +108,8 @@
 
       document.getElementById("{{ auction.id }}-last-bidder").innerHTML = `آخرین پیشنهاد: <a href="/profile/${message.id}">${message.name}</a>`
       document.getElementById("{{ auction.id }}-price").innerText = `قیمت: ${message.price} تومان`
-
+      document.getElementById("{{ auction.id }}-bid-button").disabled = false;
+      document.getElementById("{{ auction.id }}-bid-button-side").disabled = false;
 
       finishTimes[{{ auction.id }}] = new Date(message.created_at);
       finishTimes[{{ auction.id }}].setSeconds(finishTimes[{{ auction.id }}].getSeconds() + {{ auction.bid_duration }});
@@ -121,6 +122,7 @@
             document.getElementById("{{ auction.id }}-sold-image").hidden = false;
             document.getElementById("{{ auction.id }}-time").innerText = "فروخته شد!";
             document.getElementById("{{ auction.id }}-bid-button").disabled = true;
+            document.getElementById("{{ auction.id }}-active-auction").remove();
             return;
           }
           const remainingTimeString = `${String(Math.floor(remainingTime / 60)).padStart(2, '0')}:${String(remainingTime % 60).padStart(2, '0')}`;

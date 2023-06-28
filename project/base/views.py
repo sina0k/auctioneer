@@ -312,11 +312,13 @@ def createBid(auctionId, user):
 
     if user.bids_number <= 0:
         # TODO add equal to zero and throw message that you don't have any bids
-        return HttpResponse('THE USER HAS NO BID!!!', status=404)
+        # return HttpResponse('THE USER HAS NO BID!!!', status=404)
+        pass
+        # TODO do sth about error handling in whole website!!!
     else:
         user.bids_number -= 1
         user.save()
-        
+
         bid = Bid.objects.create(
             auction=auction,
             user=user,

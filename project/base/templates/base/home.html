@@ -24,7 +24,7 @@
                 {% if active_auctions %}
 
                 {% for auction in active_auctions %}
-                <div class="row fs-4 text-center align-items-center p-2">
+                <div id="{{ auction.id }}-active-auction" class="row fs-4 text-center align-items-center p-2">
 
                     <div id="active-auction-{{ auction.id }}" style="margin-top: 10px; margin-bottom: 10px;font-size: 23px;">
                         <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
@@ -49,7 +49,7 @@
                             {% if auction.end_time or auction.last_bid and auction.last_bid.user.id == request.user.id %}
                             disabled
                             {% endif %}
-                            id="{{ auction.id }}-bid-button"
+                            id="{{ auction.id }}-bid-button-side"
                             class="btn btn-success w-90 double_btn"
                             type="submit">
                         پیشنهاد
