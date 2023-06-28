@@ -3,8 +3,8 @@
 
 {% block content %}
 
-<div class="product_list">
-    <div class="container">
+<div class="container rounded background_items m-auto mt-5">
+    <div >
 
         {% for p in products %}
         <div class="row fs-4 text-center align-items-center p-2">
@@ -12,10 +12,11 @@
                 <div class="row">
 
                     <a href=" {% url 'product' p.id %}">
-                        <img width="50px" height="auto"
+                        <img width="100px" height="auto"
                              src="{% if p.image %} /{{ p.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
-                             class="card-img-top"
-                             alt=""></a>
+                             class="card-img-top rounded rounded-5"
+                             alt=""
+                            style="width:70%!important; height:auto!important;"></a>
                     <a href=" {% url 'product' p.id %}">{{ p.name }}</a>
                 </div>
             </div>

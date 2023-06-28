@@ -3,13 +3,14 @@
 
 {% block content %}
 
-
-
-<h2>برندگان مزایده‌های ۲۴ ساعت اخیر</h2>
+<div class="m-auto px-4 rounded text-center auction-card-shade" style="margin-top: 35px!important;
+    margin-bottom: 20px;width: fit-content; font-size: 2rem;">
+    برندگان مزایده‌های ۲۴ ساعت اخیر
+</div>
 </br>
 </hr>
 
-<div class="container background_items">
+<div class="container rounded background_items">
     {% for deal in won_deals%}
     {% with p=deal.cart.products.all|first %}
     {% if p %}
@@ -22,7 +23,7 @@
                 <a href=" {% url 'product' p.product.id %}">
                     <img width="50px" height="auto"
                          src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
-                         class="card-img-top"
+                         class="card-img-top rounded rounded-5"
                          alt=""></a>
                 <a href=" {% url 'product' p.product.id %}">{{ p.product.name }}</a>
             </div>
@@ -31,24 +32,28 @@
         <div class="col-2">قیمت واقعی کالا:<br/>{{ p.product.price }} تومان</div>
         <div class="col-2">شرکت:<br/>{{ p.product.company.name }}</div>
 
-        <div class="col-1">برنده مزایده:<br/><a href="{% url 'user-profile' deal.user.id %}">{{ deal.user.username }}</a></div>
+        <div class="col-1">برنده مزایده:<br/><a href="{% url 'user-profile' deal.user.id %}">{{ deal.user.username }}
+        </a></div>
         <div class="col-2">
             <a href=" {% url 'user-profile' deal.user.id %}">
-               <img width="70%" height="70%" src="{% if user.avatar %}/{{ user.avatar }}{% else %} {% static "images/profile.png" %} {% endif %}" alt="">
-           </a>
+                <img width="70%" height="70%"
+                     src="{% if user.avatar %}/{{ user.avatar }}{% else %} {% static  'images/profile.png' %} {% endif %}"
+                     class="rounded-circle"
+                     alt="">
+            </a>
 
+
+        </div>
+
+
+        <hr/>
+
+        {% endif %}
+        {% endwith %}
+        {% endfor %}
 
 
     </div>
-
-
-    <hr/>
-
-    {% endif %}
-    {% endwith %}
-    {% endfor %}
-
-
 </div>
 
 {% endblock content %}

@@ -3,28 +3,44 @@
 
 {% block content %}
 
+<div class="m-auto px-4 text-center rounded auction-card-shade" style="margin-top: 35px!important;
+    margin-bottom: 20px!important;width: fit-content!important; font-size: 3rem;">
+    سبد خرید شما
+</div>
+
 <div class="container card-list">
-    <br />
-    <h2>سبد خرید شما:</h2>
-    <hr />
-    
+    {% if not user.shopping_cart.products.first %}
+
+    <div class="w-100 text-center" style="margin-top: 5px;
+    margin-bottom: 0px;font-size: 25px;">
+        سبد خرید شما خالی است.
+    </div>
+    {% endif %}
+
     {% for p in user.shopping_cart.products.all %}
     <div class="row fs-4 text-center align-items-center p-2">
         <div class="col-2">
-            <img width="100%" height="100%" src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+            <img width="100%" height="100%"
+                 src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                 class="rounded rounded-5"
+                 alt="">
         </div>
-        <div class="col-2">{{ p.product.name }} </div>
-        <div class="col-3">توضیحات:<br />{{ p.product.description }}</div>
-        <div class="col-3">قیمت:<br />{{ p.product.price }} تومان</div>
-        <div class="col-2">تعداد:<br />{{ p.quantity }} عدد</div>
+        <div class="col-2">{{ p.product.name }}</div>
+        <div class="col-3">توضیحات:<br/>{{ p.product.description }}</div>
+        <div class="col-3">قیمت:<br/>{{ p.product.price }} تومان</div>
+        <div class="col-2">تعداد:<br/>{{ p.quantity }} عدد</div>
     </div>
-    <hr />
+    <hr/>
     {% endfor %}
+    {% if user.shopping_cart.products.first %}
 
     <form method="post" action="{% url 'request' %}" class="row justify-content-end">
         {% csrf_token %}
         <button type="submit" class="btn btn-success w-25">پرداخت</button>
     </form>
+    {% endif %}
+
+
 </div>
 <!--   Calculate Total Price from every product + Add promo Code form to get a discount and calculate discount in the front   -->
 
