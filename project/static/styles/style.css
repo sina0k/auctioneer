@@ -114,7 +114,7 @@ nav {
     margin-right: 1rem;
 }
 
-.fit-content{
+.fit-content {
     width: fit-content;
 }
 
@@ -154,10 +154,40 @@ nav {
 }
 
 .background_items {
+    position: relative;
+    z-index: 1;
+    height: fit-content;
+}
+
+.background-position-relative {
+    position: relative;
+    z-index: 1;
+    margin-top: 15pt;
+}
+
+.background_items:before {
+    content: "";
+    width: 100%;
+    border-radius: 3rem;
+
+    height: 100%;
+    position: absolute;
+    box-sizing: border-box;
+
+    background: #ffffff url("/static/images/list_background.jpg") repeat center center;
+    opacity: 70%;
+    background-size: 60%;
+    z-index: -1;
+
+}
+
+
+.background-product-list {
+
     box-sizing: border-box;
     padding: 3rem;
-    background: #ffffff url("/static/images/list_background.jpg") repeat center center;
-    background-size: 60%;
+    background: #ffffff url("/static/images/grainy_textured_wall.jpg") repeat center center;
+    background-size: 50%;
 }
 
 .card {

@@ -10,13 +10,13 @@
 </br>
 </hr>
 
-<div class="container rounded background_items">
+<div class="container rounded py-4 background_items">
     {% for deal in won_deals%}
     {% with p=deal.cart.products.all|first %}
     {% if p %}
 
 
-    <div class="row fs-4 text-center align-items-center p-2">
+    <div class="row fs-4 text-center background-position-relative align-items-center p-2">
         <div class="col-2 m-auto">
             <div class="row">
 
