@@ -267,7 +267,8 @@ def home(request):
         end_time__lt=now - timedelta(hours=2)
     )
     if request.user.is_authenticated:
-        won_auctions = Auction.objects.exclude(end_time=None).filter(last_bid__user=request.user).distinct()
+        won_auctions = Auction.objects.exclude(end_time=None).filter(last_bid__user=request.user).exclude(
+            has_paid=True).distinct()
         active_auctions = Auction.objects.filter(bids__user=request.user, end_time=None).distinct()
     else:
         won_auctions = None
@@ -419,7 +420,13 @@ def userProfile(request, pk):
     deals = user.deals.all()
     bids = user.bids.all()
     owner_user = user == request.user
-    context = {'user': user, 'owner_user': owner_user, 'deals': deals, 'bids': bids}
+
+    if request.user.is_authenticated:
+        won_auctions = Auction.objects.exclude(end_time=None).filter(last_bid__user=request.user).distinct()
+    else:
+        won_auctions = None
+    context = {'user': user, 'won_auctions': won_auctions, 'owner_user': owner_user, 'deals': deals, 'bids': bids,
+               'BID_STEP': BID_STEP}
     return render(request, 'base/profile.html', context)
 
 
@@ -476,6 +483,7 @@ def token(request):
     context = {'user': user, 'errors': errors}
     return render(request, 'base/token.html', context)
 
+
 def buy_token_request(amount):
     data = {
         "MerchantID": settings.MERCHANT,
@@ -502,12 +510,13 @@ def buy_token_request(amount):
     except requests.exceptions.ConnectionError:
         return JsonResponse({'status': False, 'code': 'connection error'})
 
+
 @login_required(login_url='login')
 def verify_buy_token(request):
     authority = request.GET.get('Authority', '')
 
     amount = int(request.user.bids_to_add) * BID_PRICE
-    
+
     data = {
         "MerchantID": settings.MERCHANT,
         "Amount": amount,

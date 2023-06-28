@@ -27,7 +27,7 @@
                 <div id="{{ auction.id }}-active-auction" class="row fs-4 text-center align-items-center p-2">
 
                     <div id="active-auction-{{ auction.id }}" style="margin-top: 10px; margin-bottom: 10px;font-size: 23px;">
-                        <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+                        <a class="text-dark" href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
 
                     </div>
 
@@ -84,7 +84,7 @@
 
         <div class="rounded p-1 h-100 border border-info background_user_items">
 
-            <h2>مزایده‌هایی که بردید!</h2>
+            <h2>مزایده‌هایی که پرداخت نکردید!</h2>
             <div class="row p-0">
                 <hr/>
                 {% if request.user.is_authenticated %}
@@ -92,7 +92,7 @@
                 <div class="row fs-4 text-center align-items-center p-0" style="margin-top: 15px; margin-bottom: 10px;">
                     <div class="col-8">
                         <div id="active-auction-{{ auction.id }}">
-                            <a href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
+                            <a class="text-dark" href="{% url 'auction' auction.id %}">{{ auction.product.name }}</a>
                             <br>
                             <div style="font-size: 18px; margin-top: 7px;">قیمت کالا: {{ auction.product.price }}</div>
                         </div>
