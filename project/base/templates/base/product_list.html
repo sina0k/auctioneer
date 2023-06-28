@@ -14,9 +14,9 @@
                     <a href=" {% url 'product' p.id %}">
                         <img width="100px" height="auto"
                              src="{% if p.image %} /{{ p.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
-                             class="card-img-top"
+                             class="card-img-top rounded rounded-5"
                              alt=""
-                            style="width:70%!important; height:auto!important; "></a>
+                            style="width:70%!important; height:auto!important;"></a>
                     <a href=" {% url 'product' p.id %}">{{ p.name }}</a>
                 </div>
             </div>

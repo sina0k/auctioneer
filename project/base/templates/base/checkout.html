@@ -22,6 +22,7 @@
         <div class="col-2">
             <img width="100%" height="100%"
                  src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                 class="rounded rounded-5"
                  alt="">
         </div>
         <div class="col-2">{{ p.product.name }}</div>
