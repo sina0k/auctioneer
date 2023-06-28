@@ -2,7 +2,7 @@
 
 <div class="col-12 col-md-6 col-lg-4">
   <a class="text-decoration-none text-dark" href="{% url 'auction' auction.id %}">
-    <div class="card p-2 mb-4 rounded-4">
+    <div class="card p-2 mb-4 rounded-4 h-100">
       <div class="img-container m-auto">
         <img
           width="auto"
@@ -13,7 +13,7 @@
         />
         <img hidden width="auto" height="auto" id="{{ auction.id }}-sold-image" class="sold-image" src="{% static 'images/sold-out.png' %}" alt="">
       </div>
-      <div class="card-body auction-card-shade">
+      <div class="card-body auction-card-shade d-flex flex-column align-items-stretch justify-content-between">
         <h3 class="card-title text-center">{{ auction.product.name }}</h3>
         <div class="card-text">
           <div id="{{ auction.id }}-price" class="margin_text">
@@ -44,7 +44,7 @@
           </h4>
         </div>
 
-        <div class="d-flex flex-column align-items-stretch gap-2">
+        <div class="d-flex flex-column align-items-stretch gap-2 ">
           <form method="post" action="{% url 'create-bid-home' auction.id %}">
             {% csrf_token %}
             <button
