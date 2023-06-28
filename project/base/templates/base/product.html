@@ -37,7 +37,7 @@
             <div class="w-100 text-center fs-1 mt-2">
                 محصول <strong>{{ product.name }}</strong> از
                 <p><a href=" {% url 'company' product.company.id %}">
-                {{product.company.name }}</a></p>
+                    {{product.company.name }}</a></p>
             </div>
         </div>
     </div>
@@ -45,20 +45,20 @@
 
 <hr/>
 
-<div class="container bg-light m-4 mx-auto rounded">
-    <br/>
-    <div class="row justify-content-center">
-        <div>
+<div class="container bg-light m-4 mx-auto rounded background_auction">
 
-            <div style="margin-top: 10px; margin-bottom: 10px;"><h2>{{ auctions.count }} تعداد مزایده از این محصول موجود
-                است:</h2></span>
-                <div style="margin-top: 20px; margin-bottom: 10px;" class="row">
-                    {% for auction in auctions %}
-                    {% include "auction-card.html" with auction=auction %}
-                    {% endfor %}
-                </div>
+    <div class="row justify-content-center rounded d-flex flex-column  m-auto">
+
+        <div style="margin-top: 10px; margin-bottom: 10px;"><h2>{{ auctions.count }} تعداد مزایده از این محصول موجود
+            است:</h2></span>
+            <div style="margin-top: 20px; margin-bottom: 10px;" class="row">
+                {% for auction in auctions %}
+                {% include "auction-card.html" with auction=auction %}
+                {% endfor %}
             </div>
         </div>
     </div>
 
-    {% endblock content %}
+</div>
+
+{% endblock content %}

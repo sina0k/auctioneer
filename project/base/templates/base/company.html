@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="container p-4">
+<div class="container p-4 text-light">
     <div class="row">
         <div class="col-12 col-md-6 text-center p-4 fs-2">
             <div class="fs-4">نام شرکت: <br/> {{ company.name }}</div>
@@ -17,10 +17,10 @@
 
 <hr/>
 
-<div class="container">
+<div class="container mx-auto rounded background_auction">
 
     {% for p in products %}
-    <div class="row fs-4 text-center align-items-center p-2">
+    <div class="row fs-4 text-center align-items-center p-2 ">
         <div class="col-2"><a href=" {% url 'product' p.id %}">
             <img width="100%" height="100%"
                  src="{% if p.image %} /{{ p.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
@@ -34,22 +34,41 @@
     {% endfor %}
 </div>
 
-<div class="container bg-light m-4 mx-auto rounded">
-    <br/>
-    <div class="row justify-content-center">
-        <div>
-            <div style="margin-top: 10px; margin-bottom: 10px;"><h2>{{ auctions.count }} تعداد مزایده از این محصولات این
-                شرکت موجود
-                است:</h2></span>
-                <div style="margin-top: 20px; margin-bottom: 10px;" class="row">
+<!--<div class="container bg-light m-4 mx-auto rounded">-->
+<!--    <br/>-->
+<!--    <div class="row justify-content-center">-->
+<!--        <div>-->
+<!--            <div style="margin-top: 10px; margin-bottom: 10px;"><h2>{{ auctions.count }} تعداد مزایده از این محصولات این-->
+<!--                شرکت موجود-->
+<!--                است:</h2></span>-->
+<!--                <div style="margin-top: 20px; margin-bottom: 10px;" class="row">-->
 
-                    <div class="row">
-                        {% for auction in auctions %}
-                        {% include "auction-card.html" with auction=auction %}
-                        {% endfor %}
-                    </div>
-                </div>
+<!--                    <div class="row">-->
+<!--                        {% for auction in auctions %}-->
+<!--                        {% include "auction-card.html" with auction=auction %}-->
+<!--                        {% endfor %}-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="container bg-light m-4 mx-auto rounded background_auction">
+
+    <div class="row justify-content-center rounded d-flex flex-column  m-auto">
+
+        <div style="margin-top: 10px; margin-bottom: 10px;"><h2>{{ auctions.count }} تعداد مزایده از محصولات این شرکت موجود
+            است:</h2></span>
+            <div style="margin-top: 20px; margin-bottom: 10px;" class="row">
+                {% for auction in auctions %}
+                {% include "auction-card.html" with auction=auction %}
+                {% endfor %}
             </div>
         </div>
+    </div>
 
-        {% endblock content %}
+</div>
+
+{% endblock content %}
