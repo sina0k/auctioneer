@@ -153,6 +153,16 @@ nav {
   background-size: 60%;
 }
 
+.card {
+  overflow: hidden;
+}
+
+.buy-token-container img {
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  margin: auto;
+}
 
 /*body, h1, h2, h3, p, img, a {*/
 /*  margin: 0;*/
