@@ -5,12 +5,12 @@ from django.db.models import Q
 
 from .tasks import createNewTaskForAuction
 from .models import Company, Product, Auction, Transaction, Deal, User, Bid, BID_STEP, ShoppingCart, BuyingProduct, \
-    DealType
+    DealType, BID_PRICE
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import UserForm, MyUserCreationForm, UserUpdateForm
+from .forms import MyUserCreationForm, UserUpdateForm
 from django.contrib.auth.decorators import login_required
-from datetime import datetime, timedelta
+from datetime import timedelta
 from django.utils import timezone
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
@@ -25,6 +25,7 @@ ZP_API_STARTPAY = f"https://sandbox.zarinpal.com/pg/StartPay/"
 
 verifyCallbackURL = 'http://127.0.0.1:8000/verify-payment/'
 verifyAuctionCallbackURL = 'http://127.0.0.1:8000/verify-auction-payment/'
+verifyTokenBuyCallbackURL = 'http://127.0.0.1:8000/verify-token-payment/'
 
 
 @login_required(login_url='login')
@@ -309,36 +310,39 @@ def createBid(auctionId, user):
     # if auction.last_bid and user.id == auction.last_bid.user.id:
     #     return HttpResponse("You already are the last bidder in this auction!", status=400)
 
-    if user.bids_number < 0:
+    if user.bids_number <= 0:
         # TODO add equal to zero and throw message that you don't have any bids
         return HttpResponse('THE USER HAS NO BID!!!', status=404)
+    else:
+        user.bids_number -= 1
+        user.save()
+        
+        bid = Bid.objects.create(
+            auction=auction,
+            user=user,
+            price=auction.current_price
+        )
 
-    bid = Bid.objects.create(
-        auction=auction,
-        user=user,
-        price=auction.current_price
-    )
+        auction.current_price += BID_STEP
+        auction.last_bid = bid
 
-    auction.current_price += BID_STEP
-    auction.last_bid = bid
+        bid.save()
+        auction.save()
+        createNewTaskForAuction(auction)
 
-    bid.save()
-    auction.save()
-    createNewTaskForAuction(auction)
-
-    channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        'auction_%s' % auction.id,
-        {
-            'type': 'new_bid',
-            'data': {
-                'name': bid.user.username,
-                'id': bid.user.id,
-                'created_at': bid.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
-                'price': float(auction.current_price)
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            'auction_%s' % auction.id,
+            {
+                'type': 'new_bid',
+                'data': {
+                    'name': bid.user.username,
+                    'id': bid.user.id,
+                    'created_at': bid.created_at.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                    'price': float(auction.current_price)
+                }
             }
-        }
-    )
+        )
 
 
 def addToCart(product_id, user):
@@ -454,15 +458,80 @@ def updateUser(request):
 @login_required(login_url='login')
 def token(request):
     user = request.user
+    errors = []
 
     if request.method == 'POST':
         number = request.POST.get('number_input')
         if number:
             tokens = int(number)
-        #   else:
-        # TODO message you haven't put a number
-        # TODO let the user buy tokens
+            if tokens <= 0:
+                errors.append('عدد نامعتبر!')
+            else:
+                user.bids_to_add = tokens
+                user.save()
+                return buy_token_request(tokens * BID_PRICE)
         return redirect('home')
 
-    context = {'user': user}
+    context = {'user': user, 'errors': errors}
     return render(request, 'base/token.html', context)
+
+def buy_token_request(amount):
+    data = {
+        "MerchantID": settings.MERCHANT,
+        "Amount": amount,
+        "Description": f"{amount} عدد توکن مزایده",
+        "CallbackURL": verifyTokenBuyCallbackURL,
+    }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+    try:
+        response = requests.post(ZP_API_REQUEST, data=data, headers=headers, timeout=10)
+
+        if response.status_code == 200:
+            response = response.json()
+            if response['Status'] == 100:
+                return redirect(ZP_API_STARTPAY + str(response['Authority']))
+            else:
+                return JsonResponse({'status': False, 'code': str(response['Status'])})
+        return HttpResponse(response)
+
+    except requests.exceptions.Timeout:
+        return JsonResponse({'status': False, 'code': 'timeout'})
+    except requests.exceptions.ConnectionError:
+        return JsonResponse({'status': False, 'code': 'connection error'})
+
+@login_required(login_url='login')
+def verify_buy_token(request):
+    authority = request.GET.get('Authority', '')
+
+    amount = int(request.user.bids_to_add) * BID_PRICE
+    
+    data = {
+        "MerchantID": settings.MERCHANT,
+        "Amount": amount,
+        "Authority": authority,
+    }
+    data = json.dumps(data)
+    # set content length by data
+    headers = {'content-type': 'application/json', 'content-length': str(len(data))}
+    response = requests.post(ZP_API_VERIFY, data=data, headers=headers)
+
+    if response.status_code == 200:
+        response = response.json()
+        if response['Status'] == 100:
+            paymentRefID = response["RefID"]
+
+            transaction = Transaction.objects.create(
+                payment_number=paymentRefID,
+                price=amount
+            )
+
+            user = request.user
+            user.bids_number += user.bids_to_add
+            user.save()
+
+            return render(request, 'base/done-payment.html', {"success": True, "refID": paymentRefID})
+        else:
+            return render(request, 'base/done-payment.html', {"success": False})
+    return HttpResponse(response)

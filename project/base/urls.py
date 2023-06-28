@@ -33,6 +33,7 @@ urlpatterns = [
     path('auction-buy-request/<str:pk>', views.auctionPayment, name='pay-auction'),
     path('verify-payment/', views.verify , name='verify'),
     path('verify-auction-payment/<str:pk>/', views.verifyAuctionPayment , name='verify-auction'),
+    path('verify-token-payment/', views.verify_buy_token , name='verify-token-buy'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
