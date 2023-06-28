@@ -104,8 +104,18 @@ nav {
     background: #ffffff url("/static/images/Homepage_Left_Box.jpg") center center;
 }
 
+.background_profile_items {
+    box-sizing: border-box;
+    background: #ffffff url("/static/images/Homepage_Left_Box.jpg") center center;
+    background-size: 100%;
+}
+
 .navbar-nav .nav-link {
     margin-right: 1rem;
+}
+
+.fit-content{
+    width: fit-content;
 }
 
 .product_list {
@@ -165,11 +175,12 @@ nav {
 
 }
 
-.token-text-custom{
-  background-color: #1b1b1b;
+.token-text-custom {
+    background-color: #1b1b1b;
 
-      font-size: 10pt;
+    font-size: 10pt;
 }
+
 .buy-token-container img {
     max-height: 200px;
     width: auto;

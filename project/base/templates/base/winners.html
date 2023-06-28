@@ -25,7 +25,7 @@
                          src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
                          class="card-img-top rounded rounded-5"
                          alt=""></a>
-                <a href=" {% url 'product' p.product.id %}" class="text-black">{{ p.product.name }}</a>
+                <a style="margin-bottom: 14pt;" href=" {% url 'product' p.product.id %}" class="text-black">{{ p.product.name }}</a>
             </div>
         </div>
         <div class="col-2">قیمت خریداری شده:<br/>{{ deal.transaction.price }} تومان</div>
