@@ -4,7 +4,7 @@ from django.utils import timezone
 from enum import Enum
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-BID_STEP = 1000
+BID_STEP = 100
 BID_PRICE = 800
 
 

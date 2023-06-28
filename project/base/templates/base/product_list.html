@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="container rounded background_items m-auto mt-5">
+<div class="container rounded-5 background_items m-auto mt-5">
     <div >
 
         {% for p in products %}
@@ -17,7 +17,7 @@
                              class="card-img-top rounded rounded-5"
                              alt=""
                             style="width:70%!important; height:auto!important;"></a>
-                    <a href=" {% url 'product' p.id %}">{{ p.name }}</a>
+                    <a class="text-black" href=" {% url 'product' p.id %}">{{ p.name }}</a>
                 </div>
             </div>
             <!--            <div class="col-1"><a href=" {% url 'product' p.id %}">{{ p.name }}</a></div>-->

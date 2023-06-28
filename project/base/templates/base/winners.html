@@ -25,14 +25,14 @@
                          src="{% if p.product.image %} /{{ p.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
                          class="card-img-top rounded rounded-5"
                          alt=""></a>
-                <a href=" {% url 'product' p.product.id %}">{{ p.product.name }}</a>
+                <a href=" {% url 'product' p.product.id %}" class="text-black">{{ p.product.name }}</a>
             </div>
         </div>
         <div class="col-2">قیمت خریداری شده:<br/>{{ deal.transaction.price }} تومان</div>
         <div class="col-2">قیمت واقعی کالا:<br/>{{ p.product.price }} تومان</div>
         <div class="col-2">شرکت:<br/>{{ p.product.company.name }}</div>
 
-        <div class="col-1">برنده مزایده:<br/><a href="{% url 'user-profile' deal.user.id %}">{{ deal.user.username }}
+        <div class="col-1">برنده مزایده:<br/><a class="text-black" href="{% url 'user-profile' deal.user.id %}">{{ deal.user.username }}
         </a></div>
         <div class="col-2">
             <a href=" {% url 'user-profile' deal.user.id %}">

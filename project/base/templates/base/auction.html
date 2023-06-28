@@ -8,7 +8,7 @@
         <div class="col-12 col-md-6 text-center p-4 fs-2">
             <div class="fs-4">توضیحات محصول: <br /> {{ auction.product.description }}</div>
             <hr />
-            <div class="fs-4">نام شرکت: <br /><a href=" {% url 'company' auction.product.company.id %}"> {{ auction.product.company.name }}</a></div>
+            <div class="fs-4">نام شرکت: <br /><a class="text-black" href=" {% url 'company' auction.product.company.id %}"> {{ auction.product.company.name }}</a></div>
             <hr />
             <div class="fs-4">توضیحات شرکت تولیدکننده: <br /> {{ auction.product.company.description }}</div>
             <hr />
@@ -64,14 +64,17 @@
 
         <div class="col-12 col-md-6">
             <div class="position-relative">
-              <img width="100%" height="100%" src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}" alt="">
+              <img width="100%" height="100%"
+                   src="{% if auction.product.image %} /{{ auction.product.image }} {% else %} {% static 'images/product.png' %} {% endif %}"
+                   class="rounded-5"
+                   alt="">
               
               <img hidden width="90%" height="90%" id="sold-image" class="sold-image" src="{% static 'images/sold-out.png' %}" alt="">
             </div>
 
             <div class="w-100 text-center fs-1 mt-2">
-                محصول <strong><a href="{% url 'product' auction.product.id %}">{{ auction.product.name }}</a></strong> از
-                <p><a href=" {% url 'company' auction.product.company.id %}">
+                محصول <strong><a class="text-black" href="{% url 'product' auction.product.id %}">{{ auction.product.name }}</a></strong> از
+                <p><a class="text-black" href=" {% url 'company' auction.product.company.id %}">
                 {{auction.product.company.name }}</a></p>
             </div>
         </div>
