@@ -86,46 +86,69 @@ nav {
   }
 }
 
-.row.justify-content-center.align-items-stretch {
-  box-sizing: border-box;
-  border-top: 1rem !important;
-}
-
-.col-12.col-md-9.rounded.p-3.border.border-info {
+.background_auction {
   box-sizing: border-box;
   padding: 4rem !important;
-  background: #ff0000 url("/static/images/Homepage_Left_Box.jpg") center center;
+  background: #ffffff url("/static/images/Homepage_Left_Box.jpg") center center;
 }
 
-.rounded.p-3.h-100.border.border-info {
+.background_user_items {
   box-sizing: border-box;
   padding: 3rem !important;
-  background: #ff0000 url("/static/images/Homepage_Left_Box.jpg") center center;
+  background: #ffffff url("/static/images/Homepage_Left_Box.jpg") center center;
 }
 
 .navbar-nav .nav-link {
   margin-right: 1rem;
 }
 
-.container.bg-light.m-4.mx-auto.rounded {
-  margin-top: -1.5rem;
-  background: #ff0000 url("/static/images/Homepage_Left_Box.jpg") center center;
-}
-
 .product_list {
   box-sizing: border-box;
   padding: 3rem;
-  background: #ff0000 url("/static/images/product_list.jpg") repeat center
+  background: #ffffff url("/static/images/product_list.jpg") repeat center
     center;
 }
 
+.profile_list {
+  box-sizing: border-box;
+  padding: 3rem;
+  background: #ffffff url("/static/images/update-profule-background.jpeg")
+    repeat center center;
+}
+
 .double_btn {
-  margin-top: 8px;
+  margin-bottom: 8px;
+  margin-top: 6px;
 }
 
 .margin_text {
   margin-top: 3px;
   margin-bottom: 8px;
+}
+
+.card-list {
+  box-sizing: border-box;
+
+  padding: 2.5rem;
+  background: #ffffff url("/static/images/OPmnVHRQ.jpeg") repeat center center;
+  background-size: 100%;
+}
+
+.auction-card-shade {
+  /*background: linear-gradient(to bottom, #dfdfdf, #ffffff);*/
+  background: linear-gradient(45deg, #d0e1d0, #ffffff);
+}
+
+.background_items {
+  box-sizing: border-box;
+  padding: 3rem;
+  background: #ffffff url("/static/images/list_background.jpg") repeat center
+    center;
+  background-size: 60%;
+}
+
+.custom-row {
+  max-width: 160%;
 }
 
 /*body, h1, h2, h3, p, img, a {*/
