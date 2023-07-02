@@ -1,18 +1,54 @@
 {% extends 'main.html' %}
-
+{% load static %}
 {% block content %}
 
-<title>Help</title>
 <br>
-<h1> راهنمای وب سایت</h1>
 
-<div>
+<div class="container learn-about rounded-4">
+    <h1> راهنمای وب سایت</h1>
+
     <br>
+
     <h4>مزایده چگونه کار می‌کند؟</h4>
-    <h5>۱. هر پیشنهاد قیمت کالا را به مقدار ثابت  ۱۰۰ تومان زیاد میکند.</h5>
-    <h5>۲. با هر پیشنهاد جدید، زمان باقیمانده مزایده از اول شروع می‌شود</h5>
-    <h5>۳. اگر تا قبل  پایان زمان پیشنهاد جدیدی داده نشود آخرین پیشنهاددهنده برنده می‌شود</h5>
-    <h5>۴. برای پیشنهاد دادن، به توکن مزایده احتیاج دارید که می‌توانید از صفحه خرید توکن بگیرید. هر پیشنهاد ۱ توکن مصرف
-        می‌کند</h5>
+    <h5>۱. هر پیشنهاد قیمت کالا را به مقدار ثابت ۱۰۰ تومان زیاد میکند.</h5>
+    <div class="mt-auto text-center justify-content-center p-4">
+
+        <img width="100px" height="auto"
+             src="{% static 'images/sh1.png' %}"
+             class="card-img-top rounded rounded-5"
+             alt=""
+             style="width:auto!important; height:auto!important;"></a>
+    </div>
+    <h5>۲. با هر پیشنهاد جدید، زمان باقیمانده مزایده از اول شروع می‌شود.</h5>
+    <h5>۳. اگر تا قبل پایان زمان پیشنهاد جدیدی داده نشود آخرین پیشنهاددهنده برنده می‌شود و به قیمت آخرین پیشنهاد خود
+        میتواند کالا را بخرد.</h5>
+    <h5>۴. بعد از بردن مزایده میتوانید در صفحه اصلی مزایده‌هایی را که بردید و خرید نکردید را پیدا کنید.</h5>
+    <div class="mt-auto text-center justify-content-center p-4">
+
+        <img width="100px" height="auto"
+             src="{% static 'images/sh2.png' %}"
+             class="about-image rounded-5"
+             alt=""
+             style="width:auto!important; height:auto!important;"></a>
+    </div>
+
+    <h5>۵. برای پیشنهاد دادن، به توکن مزایده احتیاج دارید که می‌توانید از صفحه خرید توکن بگیرید. هر پیشنهاد ۱ توکن مصرف
+        می‌کند.</h5>
+    <div class="mt-auto text-center justify-content-center p-4">
+
+        <img width="100px" height="auto"
+             src="{% static 'images/sh3.png' %}"
+             class="about-image rounded-5"
+             alt=""
+             style="width:80%!important; height:auto!important;"></a>
+    </div>
+    <div class="mt-auto text-center justify-content-center p-4">
+
+        <img width="100px" height="auto"
+             src="{% static 'images/sh4.png' %}"
+             class="about-image rounded-5"
+             alt=""
+             style="width:80%!important; height:auto!important;"></a>
+    </div>
 </div>
 {% endblock content %}

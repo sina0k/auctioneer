@@ -151,6 +151,9 @@ nav {
     margin-top: 6px;
 }
 
+.about-image{
+    background-size: 50%;
+}
 .margin_text {
     margin-top: 3px;
     margin-bottom: 8px;
@@ -162,6 +165,15 @@ nav {
     padding: 2.5rem;
     background: #ffffff url("/static/images/OPmnVHRQ.jpeg") repeat center center;
     background-size: 100%;
+}
+
+.learn-about{
+    box-sizing: border-box;
+    padding: 2rem;
+    margin-top: 2rem;
+    background: #ffffff url("/static/images/about_bg.jpg") repeat center center;
+    background-size: 50%;
+
 }
 
 .auction-card-shade {
@@ -249,3 +261,4 @@ nav {
     margin-left: 4rem;
     margin-right: 4rem;
 }
+
