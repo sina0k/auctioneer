@@ -10,7 +10,6 @@ uploads/
 *.pyc
 __pycache__/
 local_settings.py
-/project/db.sqlite3
 db.sqlite3-journal
 media
 
